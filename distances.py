@@ -4,7 +4,7 @@
 # Author        :   Vitor Rodrigues Di Toro
 # E-Mail        :   vitorrditoro@gmail.com
 # Date          :   14/03/2018
-# Last Update   :   21/03/2018
+# Last Update   :   24/03/2018
 #
 
 import unittest
@@ -24,13 +24,12 @@ def euclideanDistance(p1, p2):
     
     sum = 0
     
-    for i in range(len(p1)):
+    for u,v in zip(p1,p2):
         try:
-            sum += (p1[i]-p2[i])**2
+            sum += (u-v)**2
         except:
             pass
    
-    
     return sum**(0.5)
     
 
@@ -48,36 +47,36 @@ def manhattanDistance(p1, p2):
     
     sum = 0
     
-    for i in range(len(p1)):
+    for u,v in zip(p1,p2):
         try:
-            sum += abs(p1[i]-p2[i])
+            sum += abs(u-v)
         except:
             pass
-        
+    
     return sum
 
 
 
-def minkowskiDistance(p, q, n):
+def minkowskiDistance(p1, p2, n):
     '''
       Minkowski Distance implementation
       See: http://en.wikipedia.org/wiki/Minkowski_distance
      
       Returns the Minkowski distance between two vectors.
       
-      - p : first array
-      - q : second array
-      - n : distance order
+      - p1 : first array
+      - p2 : second array
+      - n  : distance order
     '''
     
     sum = 0
     
-    for x,y in zip(p,q):
+    for u,v in zip(p1,p2):
         try:
-            sum += abs(x-y)**n
+            sum += abs(u-v)**n
         except:
             pass
-        
+      
     return sum**(1 / n)
     
 
