@@ -115,7 +115,7 @@ def knn(training, test, k, distance = euclidean, distanceOrder = 0.5 ):
 
 
 def main():
-    training_data, test_data = getData('ionosphere.csv',60,randomize=True,verbose=False,)
+    training_data, test_data = getData('../dataset/ionosphere.csv',60,randomize=True,verbose=False,)
 
     print("\nEuclidean distance:")
     knn(training_data, test_data, k=13, distance=euclidean)
