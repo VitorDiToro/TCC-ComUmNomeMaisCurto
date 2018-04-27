@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\begin{document}
+	
+	% Insert the algorithm
+	\begin{algorithm}
+		\caption{K-Means}
+		\label{array-sum}
+		\begin{algorithmic}[1]
+			\Function{K-Means}{$k$, $dataset$, $distance\_method$, $tolerance$, $max\_iterations$}
+			\State $centroid \leftarrow$ Initialize\_centoids($k$)
+			\State $changed \leftarrow True$
+			\State $iteration \leftarrow 0$
+			\While {$changed$}
+			    \State $iteration \leftarrow iteration + 1$
+			    \State $classification \leftarrow$ classifies\_points($dataset$, $distance\_method$)
+    			\State $previous \leftarrow$ copy($centroids$)
+    			\State $centroids \leftarrow$ update\_centroids($centroids$, $classification$)
+    			\If{$iteration = max\_iterations$}
+    			    \State $changed \leftarrow False$
+    			\ElsIf{$centroids = previous$}
+    			    \State $changed \leftarrow False$
+    			\ElsIf{stop\_threshold($centroids$, $previous$, $tolerance$)}
+    			    \State $changed \leftarrow False$
+    			\EndIf
+			\EndWhile
+			\State Return $centroids$, $classification$
+			\EndFunction
+		\end{algorithmic}
+	\end{algorithm}
+	
+	
+	
+	
+		\begin{algorithm}
+		\caption{K-NearestNeighbor}
+		\label{array-sum}
+		\begin{algorithmic}[1]
+			\Function{KNN}{$k, distance\_method, training, test$}
+    			\ForAll{$i \in  Dot(test)$}
+    			    \ForAll{$j \in  Dot(training)$}
+    			        \State $distance_j \leftarrow$ distance($i$, $j$, $distanceMethod$)
+    			    \EndFor
+    			    
+    			    \State $neighbors \leftarrow$ sorted($distances$)
+    			    \State $k\_neighbors \leftarrow$ first($k$, $neighbors$)
+    			    
+    			    \State $results_i \leftarrow$ classify($i$, $k\_neighbors$)
+    			\EndFor
+    			
+    		\State $accuracy \leftarrow$ accuracy($results$,$test$)
+			\State Return $accuracy$, $results$;
+			\EndFunction
+		\end{algorithmic}
+	\end{algorithm}
+	
+\end{document}
