@@ -1,3 +1,7 @@
+### Teste Files ###
+*.teste
+*.test
+
 
 # Created by https://www.gitignore.io/api/python,jupyternotebook
 
