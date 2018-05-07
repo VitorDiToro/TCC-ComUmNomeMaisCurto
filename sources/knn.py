@@ -3,19 +3,17 @@
 
 # Implementação do KNN 
 
-# Author        :   Vitor Rodrigues Di Toro
-# E-Mail        :   vitorrditoro@gmail.com
-# Date          :   19/03/2018
-# Last Update   :   04/05/2018
-
+# Author      :  Vitor Rodrigues Di Toro
+# E-Mail      :  vitorrditoro@gmail.com
+# Date        :  19/03/2018
+# Last Update :  07/05/2018
 
 import csv
-from distances import DistanceCalculator as dist
+from sources.distances import Distance
 from random import shuffle
 
-euclidean = 1
-manhattan = 2
-minkowski = 3
+import sys
+sys.path.append('../')
 
 
 def num(s):
@@ -32,8 +30,7 @@ def get_data(dataset_name: str = 'ionosphere.csv', percent_to_training=60, rando
     training_data = []
 
     with open(dataset_name, 'r') as File:
-        reader = csv.reader(File, delimiter=',', quotechar=',',
-                            quoting=csv.QUOTE_MINIMAL)
+        reader = csv.reader(File, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 
         l_reader = list(reader)
         limit = int(len(l_reader) * (percent_to_training / 100))
@@ -71,23 +68,40 @@ class KNN:
         self.test = test
         self.training_size = len(training)
         self.test_size = len(test)
+        self.accuracy = -1
 
-    def fit(self, k, distance, distance_order=0.5):
+    def calc_accuracy(self, result):
+        score = 0
+        for i in range(self.test_size):
+
+            if result[i] == self.test[i][-1]:
+                score += 1
+
+        self.accuracy = (100 * score / self.test_size)
+
+    def fit(self, k: int, distance_method: int, distance_order=0.5):
 
         result = []
 
         for i in range(self.test_size):
             distances = {}
 
+            distance_calculator = Distance.Calculator
+
             for j in range(self.training_size):
-                if distance == euclidean:
-                    distances[j] = dist.euclidean_distance(self.test[i], self.training[j])
-                elif distance == manhattan:
-                    distances[j] = dist.manhattan_distance(self.test[i], self.training[j])
-                elif distance == minkowski:
-                    distances[j] = dist.minkowski_distance(self.test[i], self.training[j], distance_order)
+                if distance_method == Distance.Type.euclidean:
+                    distances[j] = distance_calculator.euclidean_distance(self.test[i], self.training[j])
+                elif distance_method == Distance.Type.manhattan:
+                    distances[j] = distance_calculator.manhattan_distance(self.test[i], self.training[j])
+                elif distance_method == Distance.Type.minkowski:
+                    distances[j] = distance_calculator.minkowski_distance(self.test[i], self.training[j],
+                                                                          distance_order)
 
             k_neighbors = sorted(distances, key=distances.get)[:k]
+
+            #  TODO:
+            #  -  Alterar a votação majoritária para lidar com os indices de um dicionário
+            #     e não valores hardcoded pré estabelecidos.
 
             g_count, b_count = 0, 0
 
@@ -102,15 +116,7 @@ class KNN:
             else:
                 result.append('b')
 
-        acertos = 0
-        for i in range(self.test_size):
-            # print("Obtido : " + result[i])
-            # print("Correto: " + test[i][-1])
-
-            if result[i] == self.test[i][-1]:
-                acertos += 1
-
-        print("Accuracy: %.4f %%" % (100 * acertos / self.test_size))
+        self.calc_accuracy(result)
 
 
 def main():
@@ -119,13 +125,16 @@ def main():
     knn = KNN(training_data, test_data)
 
     print("\nEuclidean distance:")
-    knn.fit(k=13, distance=euclidean)
+    knn.fit(k=13, distance_method=Distance.Type.euclidean)
+    print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nManhattan distance:")
-    knn.fit(k=13, distance=manhattan)
+    knn.fit(k=13, distance_method=Distance.Type.manhattan)
+    print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nMinkowski distance:")
-    knn.fit(k=13, distance=minkowski, distance_order=0.5)
+    knn.fit(k=13, distance_method=Distance.Type.minkowski, distance_order=0.5)
+    print("Accuracy: %.4f %%" % knn.accuracy)
 
 
 if __name__ == '__main__':
