@@ -10,77 +10,83 @@
 import unittest
 
 
-class DistanceCalculator:
-
+class Distance:
     def __init__(self):
         pass
 
-    @staticmethod
-    def euclidean_distance(p1, p2):
-        """
-        EuclideanDistance Distance implementation
+    class Type:
+        euclidean = 1
+        manhattan = 2
+        minkowski = 3
 
-        :param p1: first array
-        :param p2: second array
-        :return: EuclideanDistance distance between two vectors
+    class Calculator:
 
-        See: https://en.wikipedia.org/wiki/Euclidean_distance
-        """
+        @staticmethod
+        def euclidean_distance(p1, p2):
+            """
+            EuclideanDistance Distance implementation
 
-        sum = 0
+            :param p1: first array
+            :param p2: second array
+            :return: EuclideanDistance distance between two vectors
 
-        for u, v in zip(p1, p2):
-            try:
-                sum += (u - v) ** 2
-            except:
-                pass
+            See: https://en.wikipedia.org/wiki/Euclidean_distance
+            """
 
-        return sum ** (0.5)
+            sum = 0
 
-    @staticmethod
-    def manhattan_distance(p1, p2):
-        """
-        ManhattanDistance Distance implementation
+            for u, v in zip(p1, p2):
+                try:
+                    sum += (u - v) ** 2
+                except:
+                    pass
 
-        :param p1: first array
-        :param p2: second array
-        :return: ManhattanDistance distance between two vectors.
+            return sum ** 0.5
 
-        See: https://en.wikipedia.org/wiki/Taxicab_geometry
-        """
+        @staticmethod
+        def manhattan_distance(p1, p2):
+            """
+            ManhattanDistance Distance implementation
 
-        sum = 0
+            :param p1: first array
+            :param p2: second array
+            :return: ManhattanDistance distance between two vectors.
 
-        for u, v in zip(p1, p2):
-            try:
-                sum += abs(u - v)
-            except:
-                pass
+            See: https://en.wikipedia.org/wiki/Taxicab_geometry
+            """
 
-        return sum
+            sum = 0
 
-    @staticmethod
-    def minkowski_distance(p1, p2, n):
-        """
-        Minkowski Distance implementation
+            for u, v in zip(p1, p2):
+                try:
+                    sum += abs(u - v)
+                except:
+                    pass
 
-        :param p1: first array
-        :param p2: second array
-        :param n: distance order
-        :return: Minkowski distance between two vectors.
+            return sum
 
-        See: http://en.wikipedia.org/wiki/Minkowski_distance
-        """
+        @staticmethod
+        def minkowski_distance(p1, p2, n):
+            """
+            Minkowski Distance implementation
 
-        sum = 0
+            :param p1: first array
+            :param p2: second array
+            :param n: distance order
+            :return: Minkowski distance between two vectors.
 
-        for u, v in zip(p1, p2):
-            try:
-                sum += abs(u - v) ** n
-            except:
-                pass
+            See: http://en.wikipedia.org/wiki/Minkowski_distance
+            """
 
-        return sum ** (1 / n)
+            sum = 0
+
+            for u, v in zip(p1, p2):
+                try:
+                    sum += abs(u - v) ** n
+                except:
+                    pass
+
+            return sum ** (1 / n)
 
 
 class TestDistances(unittest.TestCase):
@@ -90,30 +96,30 @@ class TestDistances(unittest.TestCase):
 
         p1 = [0, 0, 0, 'b']
         p2 = [2, 2, 2, 'g']
-        self.assertEqual(DistanceCalculator.euclidean_distance(p1, p2), (2 * (3) ** (0.5)))
+        self.assertEqual(Distance.Calculator.euclidean_distance(p1, p2), (2 * (3) ** (0.5)))
 
         p1 = [0, 5, -8, 9, 3, 'b']
         p2 = [2, 7, -9, -1, 3, 'b']
-        self.assertEqual(round(DistanceCalculator.euclidean_distance(p1, p2), 6), 10.440307)
+        self.assertEqual(round(Distance.Calculator.euclidean_distance(p1, p2), 6), 10.440307)
 
         p1 = [0.500, 5.30, -8.2, 9.54, 3.134]
         p2 = [2.123, 7.43, -9.2, -1.50, 3.000]
-        self.assertEqual(round(DistanceCalculator.euclidean_distance(p1, p2), 6), 11.404849)
+        self.assertEqual(round(Distance.Calculator.euclidean_distance(p1, p2), 6), 11.404849)
 
     def test_manhattan_distance(self):
         # ref: http://calculator.vhex.net/calculator/distance/manhattan-distance
 
         p1 = [0, 0, 0, "String"]
         p2 = [2, 2, 2, "Str"]
-        self.assertEqual(DistanceCalculator.manhattan_distance(p1, p2), 6)
+        self.assertEqual(Distance.Calculator.manhattan_distance(p1, p2), 6)
 
         p1 = [0, 5, -8, 9, 3]
         p2 = [2, 7, -9, -1, 3]
-        self.assertEqual(DistanceCalculator.manhattan_distance(p1, p2), 15)
+        self.assertEqual(Distance.Calculator.manhattan_distance(p1, p2), 15)
 
         p1 = [0.500, 5.30, -8.2, 9.54, 3.134]
         p2 = [2.123, 7.43, -9.2, -1.50, 3.000]
-        self.assertEqual(DistanceCalculator.manhattan_distance(p1, p2), 15.927)
+        self.assertEqual(Distance.Calculator.manhattan_distance(p1, p2), 15.927)
 
     def test_minkowski_distance(self):
         # ref: http://people.revoledu.com/kardi/tutorial/Similarity/MinkowskiDistance.html
@@ -121,17 +127,25 @@ class TestDistances(unittest.TestCase):
         p1 = [0, 3, 4, 5, 'g']
         p2 = [7, 6, 3, -1, 'b']
         n = 3
-        self.assertEqual(round(DistanceCalculator.minkowski_distance(p1, p2, n), 3), 8.373)
+        self.assertEqual(round(Distance.Calculator.minkowski_distance(p1, p2, n), 3), 8.373)
 
         p1 = [0.5, 3.9, -4.37, 5.5, "Str"]
         p2 = [7.72, 6.36, 3.27, -1.98, "Sting"]
         n = -0.25
-        self.assertEqual(round(DistanceCalculator.minkowski_distance(p1, p2, n), 5), 0.02139)
+        self.assertEqual(round(Distance.Calculator.minkowski_distance(p1, p2, n), 5), 0.02139)
 
         p1 = [0.5, 3.9, -4.37, 5.5]
         p2 = [7.72, 6.36, 3.27, -1.98]
         n = 4
-        self.assertEqual(round(DistanceCalculator.minkowski_distance(p1, p2, n), 3), 9.818)
+        self.assertEqual(round(Distance.Calculator.minkowski_distance(p1, p2, n), 3), 9.818)
+
+    def test_distance_types(self):
+        # Euclidean Distance
+        self.assertLessEqual(Distance.Type.euclidean, 1)
+        # Manhattan Distance
+        self.assertLessEqual(Distance.Type.euclidean, 1)
+        # Minkowski Distance
+        self.assertLessEqual(Distance.Type.euclidean, 1)
 
 
 if __name__ == "__main__":
