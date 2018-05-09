@@ -4,7 +4,7 @@
 # Author        :   Vitor Rodrigues Di Toro
 # E-Mail        :   vitorrditoro@gmail.com
 # Date          :   14/03/2018
-# Last Update   :   04/05/2018
+# Last Update   :   09/05/2018
 #
 
 import unittest
@@ -33,15 +33,15 @@ class Distance:
             See: https://en.wikipedia.org/wiki/Euclidean_distance
             """
 
-            sum = 0
+            sum_value = 0
 
             for u, v in zip(p1, p2):
                 try:
-                    sum += (u - v) ** 2
-                except:
+                    sum_value += (u - v) ** 2
+                except TypeError:
                     pass
 
-            return sum ** 0.5
+            return sum_value ** 0.5
 
         @staticmethod
         def manhattan_distance(p1, p2):
@@ -55,15 +55,15 @@ class Distance:
             See: https://en.wikipedia.org/wiki/Taxicab_geometry
             """
 
-            sum = 0
+            sum_value = 0
 
             for u, v in zip(p1, p2):
                 try:
-                    sum += abs(u - v)
-                except:
+                    sum_value += abs(u - v)
+                except TypeError:
                     pass
 
-            return sum
+            return sum_value
 
         @staticmethod
         def minkowski_distance(p1, p2, n):
@@ -78,15 +78,15 @@ class Distance:
             See: http://en.wikipedia.org/wiki/Minkowski_distance
             """
 
-            sum = 0
+            sum_value = 0
 
             for u, v in zip(p1, p2):
                 try:
-                    sum += abs(u - v) ** n
-                except:
+                    sum_value += abs(u - v) ** n
+                except TypeError:
                     pass
 
-            return sum ** (1 / n)
+            return sum_value ** (1 / n)
 
 
 class TestDistances(unittest.TestCase):
@@ -96,7 +96,7 @@ class TestDistances(unittest.TestCase):
 
         p1 = [0, 0, 0, 'b']
         p2 = [2, 2, 2, 'g']
-        self.assertEqual(Distance.Calculator.euclidean_distance(p1, p2), (2 * (3) ** (0.5)))
+        self.assertEqual(Distance.Calculator.euclidean_distance(p1, p2), (2 * (3 ** 0.5)))
 
         p1 = [0, 5, -8, 9, 3, 'b']
         p2 = [2, 7, -9, -1, 3, 'b']
@@ -143,9 +143,9 @@ class TestDistances(unittest.TestCase):
         # Euclidean Distance
         self.assertLessEqual(Distance.Type.euclidean, 1)
         # Manhattan Distance
-        self.assertLessEqual(Distance.Type.euclidean, 1)
+        self.assertLessEqual(Distance.Type.manhattan, 2)
         # Minkowski Distance
-        self.assertLessEqual(Distance.Type.euclidean, 1)
+        self.assertLessEqual(Distance.Type.minkowski, 3)
 
 
 if __name__ == "__main__":
