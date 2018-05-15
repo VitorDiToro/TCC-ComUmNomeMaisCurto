@@ -6,13 +6,14 @@
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Date        :  19/03/2018
-# Last Update :  07/05/2018
+# Last Update :  14/05/2018
 
 import csv
 from sources.distances import Distance
 from random import shuffle
 
 import sys
+
 sys.path.append('../')
 
 
