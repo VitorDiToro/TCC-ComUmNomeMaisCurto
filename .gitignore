@@ -1,7 +1,10 @@
+## PyCharm Files ##
+*.xml
+*.iml
+
 ### Teste Files ###
 *.teste
 *.test
-
 
 # Created by https://www.gitignore.io/api/python,jupyternotebook
 
