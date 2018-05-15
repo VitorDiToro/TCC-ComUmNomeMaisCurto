@@ -8,6 +8,10 @@
 # Date        :  09/05/2018
 # Last Update :  14/05/2018
 
+
+# TODO:
+# - Existe um bug em relação à calculo de distâncias utilizando o método de Minkowski
+
 import sys
 
 import random
@@ -18,10 +22,6 @@ import csv
 from random import shuffle
 
 sys.path.append('../')
-
-euclidean = 1
-manhattan = 2
-minkowski = 3
 
 
 def get_data_lc(dataset_name, lines, columns, randomize=False):
@@ -142,10 +142,10 @@ class Kmeans:
 
             self.centroids[cluster] = p
 
-    def classifies_points(self, data, distanceMethod):
+    def classifies_points(self, data, distance_method):
         """
         :param data:
-        :param distanceMethod:
+        :param distance_method:
         :return:
 
         Calcula a distancia de todos os pontos para cada centroide
@@ -155,32 +155,46 @@ class Kmeans:
         distance_calculator = Distance.Calculator
 
         for row in data:
-            if distanceMethod == Distance.Type.euclidean:
+            if distance_method == Distance.Type.euclidean:
                 distances = [distance_calculator.euclidean_distance(row, centroid) for centroid in self.centroids]
-            elif distanceMethod == Distance.Type.manhattan:
+            elif distance_method == Distance.Type.manhattan:
                 distances = [distance_calculator.manhattan_distance(row, centroid) for centroid in self.centroids]
-            elif distanceMethod == Distance.Type.minkowski:
-                distances = [distance_calculator.minkowski_distance(row, centroid) for centroid in self.centroids]
 
-            clusterType = distances.index(min(distances))
-            self.clusters[clusterType].append(row)
+            # Todo:
+            # Fix it !!!!!!!!!!
+            #elif distance_method == Distance.Type.minkowski:
+            #   distances = [distance_calculator.minkowski_distance(row, centroid) for centroid in self.centroids]
 
-    def stop_threshold(self, list_a, list_b, distanceMethod):
+            cluster_type = distances.index(min(distances))
+            self.clusters[cluster_type].append(row)
+
+    def stop_threshold(self, list_a, list_b, distance_method):
+        """
+
+        :param list_a:
+        :param list_b:
+        :param distance_method:
+        :return:
+        """
+
+        distance_calculator = Distance.Calculator
 
         for a, b in zip(list_a, list_b):
-            if distanceMethod == euclidean:
-                if dist.euclideanDistance(list_a, list_b) > self.tolerance:
+            if distance_method == Distance.Type.euclidean:
+                if distance_calculator.euclidean_distance(a, b) > self.tolerance:
                     return False
-            elif distanceMethod == manhattan:
-                if dist.manhattanDistance(list_a, list_b) > self.tolerance:
+            elif distance_method == Distance.Type.manhattan:
+                if distance_calculator.manhattan_distance(a, b) > self.tolerance:
                     return False
-            elif distanceMethod == minkowski:
-                if dist.minkowskiDistance(list_a, list_b) > self.tolerance:
-                    return False
+            # Todo:
+            # Fix it!!!!!!!!!!
+            #elif distance_method == Distance.Type.minkowski:
+            #    if distance_calculator.minkowski_distance(a, b) > self.tolerance:
+            #        return False
 
         return True
 
-    def fit(self, data, distanceMethod=euclidean):
+    def fit(self, data, distance_method=Distance.Type.euclidean):
 
         changed = True
         iteration = 0
@@ -198,7 +212,7 @@ class Kmeans:
 
             # Calcula a distancia de todos os pontos para cada centroide
             # Classifica cada ponto do conjunto data como pertecendo a um dos clusters (centroids)
-            self.classifies_points(data, distanceMethod)
+            self.classifies_points(data, distance_method)
 
             # Salva a posição atual das centroids
             previous = self.centroids.copy()
@@ -212,7 +226,7 @@ class Kmeans:
             # Verifica critério de parada
             if self.max_iterations <= iteration:
                 self.initialize_cluster()
-                self.classifies_points(data, distanceMethod)
+                self.classifies_points(data, distance_method)
                 changed = False
                 # print("Sai em 1.")
             elif previous == self.centroids:
@@ -237,7 +251,7 @@ def main():
     data = get_data_lc('../dataset/xclara.csv', range(3000), (0, 1), randomize=True)
 
     kms = Kmeans(k=3, max_iterations=500)
-    kms.fit(data, distanceMethod=euclidean)
+    kms.fit(data, distance_method=Distance.Type.euclidean)
 
     #print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
     #print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
