@@ -6,14 +6,13 @@
 |    Distances     |   :alien:    |  :alien:   |  :alien:   |   :alien:   |  :fire:  |
 |       KNN        |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :fire:  |
 |     K-Means      |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :fire:  |
-|    K-Medoide     |    :poop:    |            |            |    :poop:   |  :poop:  |
-|    KNN - Plot    |   :alien:    |            |            |      -      |  :fire:  |
-|  K-Means - Plot  |    :poop:    |            |            |      -      |  :poop:  |
-| K-Medoide - Plot |    :poop:    |            |            |      -      |  :poop:  |
+|    KNN - Plot    |   :alien:    |   :poop:   |   :poop:   |      -      |  :fire:  |
+|  K-Means - Plot  |    :poop:    |   :poop:   |   :poop:   |      -      |  :poop:  |
 |     Accuracy     |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :poop:  |
-|      Recall      |    :poop:    |            |            |    :poop:   |  :poop:  |
-|     F1 Score     |    :poop:    |            |            |    :poop:   |  :poop:  |
+|      Recall      |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:   |  :poop:  |
+|     F1 Score     |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:   |  :poop:  |
 
 :fire: - Desatualizado
 :poop: - Não implementado
 :alien: - Tudo certo
+:rocket: - Em desenvolvimento
