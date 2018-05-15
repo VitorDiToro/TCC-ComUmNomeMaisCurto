@@ -5,14 +5,14 @@
 | :--------------: | :----------: | :--------: | :--------: | :----------: | :------: |
 |    Distances     |   :alien:    |  :alien:   |  :alien:   |   :alien:    |  :fire:  |
 |       KNN        |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
-|     K-Means      |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
+|     K-Means      |    :fire:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
 |    KNN - Plot    |   :alien:    |   :poop:   |   :poop:   |      -       |  :fire:  |
 |  K-Means - Plot  |    :poop:    |   :poop:   |   :poop:   |      -       |  :poop:  |
 |     Accuracy     |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
 |      Recall      |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:    |  :poop:  |
 |     F1 Score     |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:    |  :poop:  |
 
-:fire: - Desatualizado
-:poop: - Não implementado
-:alien: - Tudo certo
-:rocket: - Em desenvolvimento
+:fire: - Com Problema / Desatualizado<br>
+:poop: - Não implementado<br>
+:alien: - Tudo certo<br>
+:rocket: - Em desenvolvimento<br>
