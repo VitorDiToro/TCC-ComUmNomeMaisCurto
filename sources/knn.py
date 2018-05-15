@@ -24,7 +24,16 @@ def num(s):
         return s
 
 
-def get_data(dataset_name: str = 'ionosphere.csv', percent_to_training=60, randomize=True, verbose=True):
+def get_data(dataset_name: str='ionosphere.csv', percent_to_training: int=60, randomize: bool=True, verbose: bool=True):
+
+    # TODO --> Fix DocString
+    """
+    :param dataset_name:
+    :param percent_to_training:
+    :param randomize:
+    :param verbose:
+    :return:
+    """
     count = 0
     group_g = 0
     test_data = []
@@ -72,6 +81,12 @@ class KNN:
         self.accuracy = -1
 
     def calc_accuracy(self, result):
+        # TODO --> Fix DocString
+        """
+
+        :param result:
+        :return:
+        """
         score = 0
         for i in range(self.test_size):
 
@@ -81,6 +96,14 @@ class KNN:
         self.accuracy = (100 * score / self.test_size)
 
     def fit(self, k: int, distance_method: int, distance_order=0.5):
+        # TODO --> Fix DocString
+        """
+
+        :param k:
+        :param distance_method:
+        :param distance_order:
+        :return:
+        """
 
         result = []
 
@@ -121,20 +144,21 @@ class KNN:
 
 
 def main():
-    training_data, test_data = get_data('../dataset/ionosphere.csv', 60, randomize=True, verbose=False)
+    training_data, test_data = get_data('../dataset/ionosphere.csv', percent_to_training=60, randomize=True, verbose=False)
 
     knn = KNN(training_data, test_data)
 
+    k = 13
     print("\nEuclidean distance:")
-    knn.fit(k=13, distance_method=Distance.Type.euclidean)
+    knn.fit(k=k, distance_method=Distance.Type.euclidean)
     print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nManhattan distance:")
-    knn.fit(k=13, distance_method=Distance.Type.manhattan)
+    knn.fit(k=k, distance_method=Distance.Type.manhattan)
     print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nMinkowski distance:")
-    knn.fit(k=13, distance_method=Distance.Type.minkowski, distance_order=0.5)
+    knn.fit(k=k, distance_method=Distance.Type.minkowski, distance_order=0.5)
     print("Accuracy: %.4f %%" % knn.accuracy)
 
 
