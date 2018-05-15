@@ -1,7 +1,7 @@
 # Comparação entre aprendizado de máquina supervisionado e não supervisionado na avaliação de dados de radar
 
 
-|      Móduos      | Implementado |    POO     |   PEP-8    | unit testing | Notebook |
+|      Móduos      | Implementado |    POO     |   PEP-8    | Unit Testing | Notebook |
 | :--------------: | :----------: | :--------: | :--------: | :----------: | :------: |
 |    Distances     |   :alien:    |  :alien:   |  :alien:   |   :alien:    |  :fire:  |
 |       KNN        |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
