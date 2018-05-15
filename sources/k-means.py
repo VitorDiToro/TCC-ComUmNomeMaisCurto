@@ -8,10 +8,6 @@
 # Date        :  09/05/2018
 # Last Update :  14/05/2018
 
-
-# TODO:
-# - Existe um bug em relação à calculo de distâncias utilizando o método de Minkowski
-
 import sys
 
 import random
@@ -142,10 +138,11 @@ class Kmeans:
 
             self.centroids[cluster] = p
 
-    def classifies_points(self, data, distance_method):
+    def classifies_points(self, data, distance_method, distance_order=0.5):
         """
         :param data:
         :param distance_method:
+        :param distance_order:
         :return:
 
         Calcula a distancia de todos os pontos para cada centroide
@@ -159,21 +156,19 @@ class Kmeans:
                 distances = [distance_calculator.euclidean_distance(row, centroid) for centroid in self.centroids]
             elif distance_method == Distance.Type.manhattan:
                 distances = [distance_calculator.manhattan_distance(row, centroid) for centroid in self.centroids]
-
-            # Todo:
-            # Fix it !!!!!!!!!!
-            #elif distance_method == Distance.Type.minkowski:
-            #   distances = [distance_calculator.minkowski_distance(row, centroid) for centroid in self.centroids]
+            elif distance_method == Distance.Type.minkowski:
+                distances = [distance_calculator.minkowski_distance(row, centroid, distance_order) for centroid in self.centroids]
 
             cluster_type = distances.index(min(distances))
             self.clusters[cluster_type].append(row)
 
-    def stop_threshold(self, list_a, list_b, distance_method):
+    def stop_threshold(self, list_a, list_b, distance_method, distance_order=0.5):
         """
 
         :param list_a:
         :param list_b:
         :param distance_method:
+        :param distance_order:
         :return:
         """
 
@@ -186,15 +181,13 @@ class Kmeans:
             elif distance_method == Distance.Type.manhattan:
                 if distance_calculator.manhattan_distance(a, b) > self.tolerance:
                     return False
-            # Todo:
-            # Fix it!!!!!!!!!!
-            #elif distance_method == Distance.Type.minkowski:
-            #    if distance_calculator.minkowski_distance(a, b) > self.tolerance:
-            #        return False
+            elif distance_method == Distance.Type.minkowski:
+                if distance_calculator.minkowski_distance(a, b, distance_order) > self.tolerance:
+                    return False
 
         return True
 
-    def fit(self, data, distance_method=Distance.Type.euclidean):
+    def fit(self, data, distance_method=Distance.Type.euclidean, distance_order=0.5):
 
         changed = True
         iteration = 0
@@ -212,7 +205,7 @@ class Kmeans:
 
             # Calcula a distancia de todos os pontos para cada centroide
             # Classifica cada ponto do conjunto data como pertecendo a um dos clusters (centroids)
-            self.classifies_points(data, distance_method)
+            self.classifies_points(data, distance_method, distance_order)
 
             # Salva a posição atual das centroids
             previous = self.centroids.copy()
@@ -233,6 +226,7 @@ class Kmeans:
                 print("=== Sistema convergiu! \o/ === \n")
                 changed = False
 
+            # TODO: Fix it
             # elif self.stop_threshold(previous, self.centroids,distanceMethod):
             #    self.initialize_cluster()
             #    self.classifies_points(data, distanceMethod)
@@ -253,20 +247,22 @@ def main():
     kms = Kmeans(k=3, max_iterations=500)
     kms.fit(data, distance_method=Distance.Type.euclidean)
 
-    #print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
-    #print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
-    #print("Pontos do tipo 3: %d" % len(kms.clusters[2]))
+    print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
+    print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
+    print("Pontos do tipo 3: %d" % len(kms.clusters[2]))
 
-    #from matplotlib import pyplot as plt
+    from matplotlib import pyplot as plt
 
-    #for x, y in kms.clusters[0]:
-    #    plt.scatter(x, y, c='red', s=7)
+    for x, y in kms.clusters[0]:
+        plt.scatter(x, y, c='red', s=7)
 
-    #for x, y in kms.clusters[1]:
-    #    plt.scatter(x, y, c='blue', s=7)
+    for x, y in kms.clusters[1]:
+        plt.scatter(x, y, c='blue', s=7)
 
-    #for x, y in kms.clusters[2]:
-    #    plt.scatter(x, y, c='green', s=7)
+    for x, y in kms.clusters[2]:
+        plt.scatter(x, y, c='green', s=7)
+
+    plt.show()
 
 
 if __name__ == '__main__':
