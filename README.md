@@ -7,8 +7,8 @@
 |       KNN        |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :fire:  |
 |     K-Means      |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :fire:  |
 |    KNN - Plot    |   :alien:    |   :poop:   |   :poop:   |      -      |  :fire:  |
-|  K-Means - Plot  |    :poop:    |   :poop:   |   :poop:   |      -      |  :poop:  |
-|     Accuracy     |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :poop:  |
+|  K-Means - Plot  |    :poop:    |   :poop:   |   :poop:   |      -      |  :fire::poop:  |
+|     Accuracy     |   :alien:    |  :alien:   |  :alien:   |    :poop:   |  :fire:  |
 |      Recall      |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:   |  :poop:  |
 |     F1 Score     |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:   |  :poop:  |
 
