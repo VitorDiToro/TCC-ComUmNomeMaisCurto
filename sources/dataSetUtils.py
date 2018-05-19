@@ -59,7 +59,7 @@ class DataSet:
         return data
 
     @staticmethod
-    def get_data(dataset_name: str='ionosphere.csv', percent_to_training: int=60, randomize: bool=True, verbose: bool=True):
+    def get_data(dataset_name: str='data.csv', percent_to_training: int=60, randomize: bool=True, verbose: bool=True):
         # TODO --> Fix DocString
         """
         :param dataset_name:

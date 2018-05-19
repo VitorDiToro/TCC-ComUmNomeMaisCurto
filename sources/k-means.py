@@ -1,40 +1,22 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Implementação do KNN
+# Implementação do K-Means
 
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Date        :  09/05/2018
-# Last Update :  14/05/2018
+# Last Update :  19/05/2018
 
 import sys
 
 import random
 import statistics
-from sources.distances import Distance
+from sources.distances import *
+from sources.dataSetUtils import DataSet
 
-import csv
-from random import shuffle
 
 sys.path.append('../')
-
-
-def get_data_lc(dataset_name, lines, columns, randomize=False):
-    with open(dataset_name, 'r') as File:
-        reader = csv.reader(File, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
-
-        l_reader = list(reader)
-
-        if randomize:
-            shuffle(l_reader)
-
-    data = []
-    tmp = [[l_reader[i][j] for j in columns] for i in lines]
-    for row in tmp:
-        data.append([num(i) for i in row])
-
-    return data
 
 
 def num(s):
@@ -59,22 +41,23 @@ class Clusters(dict):
     """
 
     def __init__(self):
+        super().__init__()
         pass
 
     def iter_columns(self, cluster):
         try:
             return range(len(self[cluster][0]))
-        except Exception:
+        except ValueError:
             return []
 
     def iter_lines(self, cluster):
         try:
             return range(len(self[cluster]))
-        except Exception:
+        except ValueError:
             return []
 
 
-class Kmeans:
+class KMeans:
 
     def __init__(self, k=2, tolerance=0.0001, max_iterations=500):
         self.k = k
@@ -94,7 +77,7 @@ class Kmeans:
         for i in range(self.k):
             self.clusters[i] = []
 
-    def initialize_centoids(self, data):
+    def initialize_centroids(self, data):
         """
         Inicializa as K centroides, em posições aleatórias dentro do limite de Max e Min.
 
@@ -149,22 +132,18 @@ class Kmeans:
         Classifica cada ponto do conjunto data como pertecendo a um dos clusters (centroids)
         """
 
-        distance_calculator = Distance.Calculator
+        distance = Distance()
+        distance.set_distance_order(distance_order)
 
         for row in data:
-            if distance_method == Distance.Type.euclidean:
-                distances = [distance_calculator.euclidean_distance(row, centroid) for centroid in self.centroids]
-            elif distance_method == Distance.Type.manhattan:
-                distances = [distance_calculator.manhattan_distance(row, centroid) for centroid in self.centroids]
-            elif distance_method == Distance.Type.minkowski:
-                distances = [distance_calculator.minkowski_distance(row, centroid, distance_order) for centroid in self.centroids]
+
+            distances = [distance.calculator(row, centroid, distance_method) for centroid in self.centroids]
 
             cluster_type = distances.index(min(distances))
             self.clusters[cluster_type].append(row)
 
     def stop_threshold(self, list_a, list_b, distance_method, distance_order=0.5):
         """
-
         :param list_a:
         :param list_b:
         :param distance_method:
@@ -172,18 +151,12 @@ class Kmeans:
         :return:
         """
 
-        distance_calculator = Distance.Calculator
+        distance = Distance()
+        distance.set_distance_order(distance_order)
 
         for a, b in zip(list_a, list_b):
-            if distance_method == Distance.Type.euclidean:
-                if distance_calculator.euclidean_distance(a, b) > self.tolerance:
-                    return False
-            elif distance_method == Distance.Type.manhattan:
-                if distance_calculator.manhattan_distance(a, b) > self.tolerance:
-                    return False
-            elif distance_method == Distance.Type.minkowski:
-                if distance_calculator.minkowski_distance(a, b, distance_order) > self.tolerance:
-                    return False
+            if distance.calculator(a, b, distance_method) > self.tolerance:
+                return False
 
         return True
 
@@ -193,7 +166,7 @@ class Kmeans:
         iteration = 0
 
         # Inicializa as K centroides (posições aleatórias)
-        self.initialize_centoids(data)
+        self.initialize_centroids(data)
 
         while changed:  # ....repete a porra toda
 
@@ -220,18 +193,16 @@ class Kmeans:
             if self.max_iterations <= iteration:
                 self.initialize_cluster()
                 self.classifies_points(data, distance_method)
+                print("=== Número máximo de iterações atingido! === \n")
                 changed = False
-                # print("Sai em 1.")
             elif previous == self.centroids:
                 print("=== Sistema convergiu! \o/ === \n")
                 changed = False
-
-            # TODO: Fix it
-            # elif self.stop_threshold(previous, self.centroids,distanceMethod):
-            #    self.initialize_cluster()
-            #    self.classifies_points(data, distanceMethod)
-            #    changed = False
-            #    print("Sai em 3.")
+            elif self.stop_threshold(previous, self.centroids, distance_method):
+                self.initialize_cluster()
+                self.classifies_points(data, distance_method)
+                print('=== Convergência Parcial (Stop Threshold === \n')
+                changed = False
 
         print("Iteration: %d" % iteration)
 
@@ -242,9 +213,9 @@ class Kmeans:
 
 
 def main():
-    data = get_data_lc('../dataset/xclara.csv', range(3000), (0, 1), randomize=True)
+    data = DataSet.get_data_lc('../dataset/xclara.csv', range(3000), (0, 1), randomize=True)
 
-    kms = Kmeans(k=3, max_iterations=500)
+    kms = KMeans(k=3, max_iterations=500)
     kms.fit(data, distance_method=Distance.Type.euclidean)
 
     print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
