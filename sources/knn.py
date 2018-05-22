@@ -8,13 +8,11 @@
 # Date        :  19/03/2018
 # Last Update :  19/05/2018
 
+import sys
+sys.path.append('../')
 
 from sources.distances import *
 from sources.dataSetUtils import DataSet
-
-import sys
-
-sys.path.append('../')
 
 
 class KNN:
@@ -43,7 +41,7 @@ class KNN:
 
         self.accuracy = (100 * score / self.test_size)
 
-    def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
+    def fit(self, k: int, distance_method: Distance.Type, distance_order=0.5):
         """
 
         :param k:
@@ -93,15 +91,15 @@ def main():
 
     k = 13
     print("\nEuclidean distance:")
-    knn.fit(k=k, distance_method=Distance.Type.euclidean)
+    knn.fit(k=k, distance_method=Distance.Type.euclidean())
     print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nManhattan distance:")
-    knn.fit(k=k, distance_method=Distance.Type.manhattan)
+    knn.fit(k=k, distance_method=Distance.Type.manhattan())
     print("Accuracy: %.4f %%" % knn.accuracy)
 
     print("\nMinkowski distance:")
-    knn.fit(k=k, distance_method=Distance.Type.minkowski, distance_order=0.5)
+    knn.fit(k=k, distance_method=Distance.Type.minkowski(), distance_order=0.5)
     print("Accuracy: %.4f %%" % knn.accuracy)
 
 
