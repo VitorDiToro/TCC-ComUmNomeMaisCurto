@@ -9,14 +9,13 @@
 # Last Update :  19/05/2018
 
 import sys
+sys.path.append('../')
 
 import random
 import statistics
-from sources.distances import *
+from sources.distances import Distance
 from sources.dataSetUtils import DataSet
 
-
-sys.path.append('../')
 
 
 def num(s):
@@ -213,13 +212,14 @@ class KMeans:
 
 
 def main():
-    data = DataSet.get_data_lc('../dataset/xclara.csv', range(3000), (0, 1), randomize=True)
+    data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True)
 
-    kms = KMeans(k=3, max_iterations=500)
-    kms.fit(data, distance_method=Distance.Type.euclidean)
+    kms = KMeans(k=2, max_iterations=500)
+    kms.fit(data, distance_method=Distance.Type.euclidean())
 
     print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
     print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
+    """
     print("Pontos do tipo 3: %d" % len(kms.clusters[2]))
 
     from matplotlib import pyplot as plt
@@ -234,6 +234,7 @@ def main():
         plt.scatter(x, y, c='green', s=7)
 
     plt.show()
+    """
 
 
 if __name__ == '__main__':
