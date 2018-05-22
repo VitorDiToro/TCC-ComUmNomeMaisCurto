@@ -10,32 +10,50 @@
 import unittest
 
 
-class DistanceType(int):
+class _DistanceType(int):
     euclidean = 1
     manhattan = 2
     minkowski = 3
 
-    def __init__(self, v):
-        super().__init__(v)
+    def __init__(self):
         pass
 
 
 class Distance:
-
     def __init__(self):
         self.distance_order = None
 
     class Type:
-        euclidean = DistanceType(1)
-        manhattan = DistanceType(2)
-        minkowski = DistanceType(3)
+        def __init__(self):
+            pass
+
+        @staticmethod
+        def euclidean():
+            return 1
+
+        @staticmethod
+        def manhattan():
+            return 2
+
+        @staticmethod
+        def minkowski():
+            return 3
+
+        @staticmethod
+        def get_str(distance_method):
+            if distance_method == _DistanceType.euclidean:
+                return "Euclidean"
+            if distance_method == _DistanceType.manhattan:
+                return "Manhattan"
+            if distance_method == _DistanceType.minkowski:
+                return "Minkowski"
 
     def set_distance_order(self, distance_order):
         self.distance_order = distance_order
 
-    def calculator(self, p1, p2, distance_method: DistanceType):
+    def calculator(self, p1, p2, distance_method: _DistanceType):
 
-        if distance_method == DistanceType.euclidean:
+        if distance_method == _DistanceType.euclidean:
             """
             EuclideanDistance Distance implementation
                 
@@ -51,7 +69,7 @@ class Distance:
 
             result = sum_value ** 0.5
 
-        elif distance_method == DistanceType.manhattan:
+        elif distance_method == _DistanceType.manhattan:
             """
             ManhattanDistance Distance implementation
         
@@ -68,7 +86,7 @@ class Distance:
 
             result = sum_value
 
-        elif distance_method == DistanceType.minkowski:
+        elif distance_method == _DistanceType.minkowski:
             """
             Minkowski Distance implementation
     
@@ -101,15 +119,15 @@ class TestDistances(unittest.TestCase):
         p1 = [0, 0, 0, 'b']
         p2 = [2, 2, 2, 'g']
 
-        self.assertEqual(distance.calculator(p1, p2, Distance.Type.euclidean), (2 * (3 ** 0.5)))
+        self.assertEqual(distance.calculator(p1, p2, Distance.Type.euclidean()), (2 * (3 ** 0.5)))
 
         p1 = [0, 5, -8, 9, 3, 'b']
         p2 = [2, 7, -9, -1, 3, 'b']
-        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.euclidean), 6), 10.440307)
+        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.euclidean()), 6), 10.440307)
 
         p1 = [0.500, 5.30, -8.2, 9.54, 3.134]
         p2 = [2.123, 7.43, -9.2, -1.50, 3.000]
-        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.euclidean), 6), 11.404849)
+        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.euclidean()), 6), 11.404849)
 
     def test_manhattan_distance(self):
         # ref: http://calculator.vhex.net/calculator/distance/manhattan-distance
@@ -119,15 +137,15 @@ class TestDistances(unittest.TestCase):
         p1 = [0, 0, 0, "String"]
         p2 = [2, 2, 2, "Str"]
 
-        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan), 6)
+        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan()), 6)
 
         p1 = [0, 5, -8, 9, 3]
         p2 = [2, 7, -9, -1, 3]
-        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan), 15)
+        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan()), 15)
 
         p1 = [0.500, 5.30, -8.2, 9.54, 3.134]
         p2 = [2.123, 7.43, -9.2, -1.50, 3.000]
-        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan), 15.927)
+        self.assertEqual(distance.calculator(p1, p2, Distance.Type.manhattan()), 15.927)
 
     def test_minkowski_distance(self):
         # ref: http://people.revoledu.com/kardi/tutorial/Similarity/MinkowskiDistance.html
@@ -139,29 +157,34 @@ class TestDistances(unittest.TestCase):
         n = 3
 
         distance.set_distance_order(n)
-        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski), 3), 8.373)
+        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski()), 3), 8.373)
 
         p1 = [0.5, 3.9, -4.37, 5.5, "Str"]
         p2 = [7.72, 6.36, 3.27, -1.98, "Sting"]
         n = -0.25
 
         distance.set_distance_order(n)
-        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski), 5), 0.02139)
+        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski()), 5), 0.02139)
 
         p1 = [0.5, 3.9, -4.37, 5.5]
         p2 = [7.72, 6.36, 3.27, -1.98]
         n = 4
 
         distance.set_distance_order(n)
-        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski), 3), 9.818)
+        self.assertEqual(round(distance.calculator(p1, p2, Distance.Type.minkowski()), 3), 9.818)
 
     def test_distance_types(self):
         # Euclidean Distance
-        self.assertLessEqual(Distance.Type.euclidean, 1)
+        self.assertEqual(Distance.Type.euclidean(), 1)
         # Manhattan Distance
-        self.assertLessEqual(Distance.Type.manhattan, 2)
+        self.assertEqual(Distance.Type.manhattan(), 2)
         # Minkowski Distance
-        self.assertLessEqual(Distance.Type.minkowski, 3)
+        self.assertEqual(Distance.Type.minkowski(), 3)
+
+    def test_get_str(self):
+        self.assertEqual(Distance.Type.get_str(Distance.Type.euclidean()), 'Euclidean')
+        self.assertEqual(Distance.Type.get_str(Distance.Type.manhattan()), 'Manhattan')
+        self.assertEqual(Distance.Type.get_str(Distance.Type.minkowski()), 'Minkowski')
 
 
 if __name__ == "__main__":
