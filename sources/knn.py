@@ -6,7 +6,7 @@
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Date        :  19/03/2018
-# Last Update :  23/05/2018
+# Last Update :  24/05/2018
 
 import sys
 sys.path.append('../')
@@ -25,8 +25,9 @@ class KNN:
         self.recall = -1
         self.precision = -1
         self.f1_score = -1
-        self.__positives__ = 0.0
-        self.__positive_hits__ = 0.0
+        self.__number_of_positives__ = -1
+        self.__positive_hits__ = -1
+        self.__classified_as_positive__ = -1
 
     def __calc_accuracy__(self, result):
         # TODO --> Fix DocString
@@ -37,50 +38,56 @@ class KNN:
         """
 
         score = 0
-        self.__positives__ = 0.0
+        self.__number_of_positives__ = 0.0
         self.__positive_hits__ = 0.0
+        self.__classified_as_positive__ = 0.0
 
         for i in range(self.test_size):
             # count hits
             if result[i] == self.test[i][-1]:
                 score += 1
 
-            # count positives
+            # count positives classifications
             if result[i] == 'g':
-                self.__positives__ = self.__positives__ + 1.0
+                self.__classified_as_positive__ = self.__classified_as_positive__ + 1.0
 
             # count positive hits
             if result[i] == 'g' and self.test[i][-1] == 'g':
                 self.__positive_hits__ = self.__positive_hits__ + 1.0
 
+            # count number of positives values in Test Group
+            if self.test[i][-1] == 'g':
+                self.__number_of_positives__ = self.__number_of_positives__ + 1.0
+
         self.accuracy = score / self.test_size
+
+    def __precision__(self):
+        # TODO --> Fix DocString
+        """
+
+        """
+        self.precision = self.__positive_hits__ / self.__number_of_positives__
 
     def __calc_recall__(self):
         # TODO --> Fix DocString
         """
 
-        :param result:
-        :return:
         """
-        self.recall = self.__positive_hits__ / self.__positives__
+        self.recall = self.__positive_hits__ / self.__classified_as_positive__
 
     def __calc_f1_score__(self):
         # TODO --> Fix DocString
         """
 
-        :param result:
-        :return:
         """
-        self.precision = self.__positive_hits__ / self.test_size
         self.f1_score = 2 * (self.precision * self.recall)/(self.precision + self.recall)
 
     def fit(self, k: int, distance_method: Distance.Type, distance_order=0.5):
+        # TODO --> Fix DocString
         """
-
         :param k:
         :param distance_method:
         :param distance_order:
-        :return:
         """
 
         result = []
@@ -116,6 +123,7 @@ class KNN:
         self.__calc_accuracy__(result)
         self.__calc_recall__()
         self.__calc_f1_score__()
+
 
 def main():
     data_set_name = '../dataset/ionosphere.csv'
