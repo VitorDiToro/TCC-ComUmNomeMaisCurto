@@ -5,7 +5,7 @@
 
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
-# Date        :  09/05/2018
+# Create      :  09/05/2018
 # Last Update :  19/05/2018
 
 import sys

@@ -102,12 +102,12 @@ def test_k_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
 
 def main():
     k_first = 1
-    k_last = 5
-    times = 5
+    k_last = 349
+    times = 100
 
-    #test_k_and_save_csv(k_first, k_last, times, Distance.Type.euclidean(), verbose=False)
+    test_k_and_save_csv(k_first, k_last, times, Distance.Type.euclidean(), verbose=False)
     test_k_and_save_csv(k_first, k_last, times, Distance.Type.manhattan(), verbose=False)
-    #test_k_and_save_csv(k_first, k_last, times, Distance.Type.minkowski(), verbose=False)
+    test_k_and_save_csv(k_first, k_last, times, Distance.Type.minkowski(), verbose=False)
 
 
 if __name__ == '__main__':

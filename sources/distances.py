@@ -3,9 +3,8 @@
 #
 # Author        :   Vitor Rodrigues Di Toro
 # E-Mail        :   vitorrditoro@gmail.com
-# Date          :   14/03/2018
+# Create        :   14/03/2018
 # Last Update   :   09/05/2018
-#
 
 import unittest
 
