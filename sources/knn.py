@@ -134,15 +134,15 @@ def main():
     k = 13
     print("\nEuclidean distance:")
     knn.fit(k=k, distance_method=Distance.Type.euclidean())
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nManhattan distance:")
     knn.fit(k=k, distance_method=Distance.Type.manhattan())
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nMinkowski distance:")
     knn.fit(k=k, distance_method=Distance.Type.minkowski(), distance_order=0.5)
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    print("Accuracy: %.4f" % knn.accuracy)
 
 
 if __name__ == '__main__':
