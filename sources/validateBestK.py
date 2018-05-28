@@ -1,39 +1,38 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# __main__.py
-
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Create      :  19/05/2018
 # Last Update :  24/05/2018
 
-import sys
+import os
 import csv
 import datetime
 import statistics
 
-sys.path.append('../')
-
-from sources.dataSetUtils import *
+from sources.dataSetUtils import DataSet
 from sources.knn import KNN
-from sources.distances import *
+from sources.distances import Distance, DistanceType
 
 
 def generate_csv(accuracy_mean, accuracy_stdev,
                  recall_mean, recall_stdev,
                  f1_score_mean, f1_score_stdev,
-                 k_first, k_last, times, distance_method):
+                 k_first, k_last, times, distance_method,
+                 output_path="../outputs/"):
 
     date_now = datetime.datetime.now().strftime('%Y-%m-%d  %H.%M.%S')
-    dist_method_str = Distance.Type.get_str(distance_method)
-    path = "../outputs/"
+    dist_method_str = distance_method.name()
 
-    file_name = path + dist_method_str + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times[" + str(times) + "]_-_" + \
-                date_now + ".csv"
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
-    with open(file_name, 'w') as myfile:
-        wr = csv.writer(myfile, lineterminator='\n')  # , quoting=csv.QUOTE_ALL)
+    file_name = output_path + dist_method_str + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times[" + str(times) \
+        + "]_-_" + date_now + ".csv"
+
+    with open(file_name, 'w') as my_file:
+        wr = csv.writer(my_file, lineterminator='\n')  # , quoting=csv.QUOTE_ALL)
         wr.writerow(["mean_accuracy", "stdev_accuracy", "mean_recall", "stdev_recall",
                      "mean_sf1", "stdev_sf1"])
 
@@ -41,22 +40,18 @@ def generate_csv(accuracy_mean, accuracy_stdev,
             wr.writerow([row[0], row[1], row[2], row[3], row[4], row[5]])
 
 
-def test_k_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
-                        distance_method: Distance.Type = Distance.Type.euclidean, verbose: bool = False):
-    if k_first <= 0:
-        k_first = 1
-
-    ds = DataSet()
-    ds.fix_data_set('ionosphere', 'data')
-
-    data_set_name = '../dataset/ionosphere.csv'
-
+def test_ks_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
+                         distance_method: DistanceType = DistanceType.EUCLIDEAN,
+                         data_set_path="data_set", output_path="../output/", verbose: bool = False):
     accuracy_mean = []
     accuracy_stdev = []
     recall_mean = []
     recall_stdev = []
     f1_score_mean = []
     f1_score_stdev = []
+
+    if k_first <= 0:
+        k_first = 1
 
     if verbose:
         print("Calculating: ", end='')
@@ -73,7 +68,7 @@ def test_k_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
                 print("K" + str(k) + ", ", end='')
 
         for i in range(times):
-            training_data, test_data = DataSet.get_data(data_set_name, percent_to_training=60, randomize=True,
+            training_data, test_data = DataSet.get_data(data_set_path, percent_to_training=60, randomize=True,
                                                         verbose=False)
             knn = KNN(training_data, test_data)
             knn.fit(k=k, distance_method=distance_method)
@@ -85,29 +80,36 @@ def test_k_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
             if verbose:
                 print("accuracy: " + str(knn.accuracy))
 
-        accuracy_mean.append(sum(accuracy_values) / len(accuracy_values))
+        accuracy_mean.append(statistics.mean(accuracy_values))
         accuracy_stdev.append(statistics.stdev(accuracy_values))
 
-        recall_mean.append(sum(recall_values) / len(recall_values))
+        recall_mean.append(statistics.mean(recall_values))
         recall_stdev.append(statistics.stdev(recall_values))
 
-        f1_score_mean.append(sum(f1_score_values) / len(f1_score_values))
+        f1_score_mean.append(statistics.mean(f1_score_values))
         f1_score_stdev.append(statistics.stdev(f1_score_values))
 
     generate_csv(accuracy_mean, accuracy_stdev,
                  recall_mean, recall_stdev,
                  f1_score_mean, f1_score_stdev,
-                 k_first, k_last, times, distance_method)
+                 k_first, k_last, times, distance_method,
+                 output_path=output_path)
 
 
 def main():
+    ds = DataSet()
+    ds.fix_data_set('ionosphere', 'data')
+
+    data_set_path = '../dataset/ionosphere.csv'
+    output_path = "../outputs/"
+
     k_first = 1
     k_last = 349
-    times = 100
+    times = 1000
 
-    test_k_and_save_csv(k_first, k_last, times, Distance.Type.euclidean(), verbose=False)
-    test_k_and_save_csv(k_first, k_last, times, Distance.Type.manhattan(), verbose=False)
-    test_k_and_save_csv(k_first, k_last, times, Distance.Type.minkowski(), verbose=False)
+    test_ks_and_save_csv(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
+    test_ks_and_save_csv(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
+    test_ks_and_save_csv(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
 
 
 if __name__ == '__main__':
