@@ -3,19 +3,16 @@
 
 # Implementação do K-Means
 
-# Author      :  Vitor Rodrigues Di Toro
-# E-Mail      :  vitorrditoro@gmail.com
+# Authors     :  Vitor Rodrigues Di Toro <vitorrditoro@gmail.com>
+#                Jonatan Alberto Afonso  <joalberto1@hotmail.com>
 # Create      :  09/05/2018
-# Last Update :  19/05/2018
+# Last Update :  26/05/2018
 
-import sys
-sys.path.append('../')
 
 import random
 import statistics
-from sources.distances import Distance
+from sources.distances import Distance, DistanceType
 from sources.dataSetUtils import DataSet
-
 
 
 def num(s):
@@ -64,6 +61,16 @@ class KMeans:
         self.max_iterations = max_iterations
         self.centroids = []
         self.clusters = Clusters()
+        self.labels = []
+        self.iteration = 0
+
+    def _recover_labels(self, data):
+        labels = []
+        for i in data:
+            for j in range(0, len(self.clusters)):
+                if i in self.clusters[j]:
+                    labels.append(j)
+        self.labels = labels
 
     def initialize_cluster(self):
         """
@@ -159,7 +166,7 @@ class KMeans:
 
         return True
 
-    def fit(self, data, distance_method=Distance.Type.euclidean, distance_order=0.5):
+    def fit(self, data, distance_method=DistanceType.EUCLIDEAN, distance_order=0.5):
 
         changed = True
         iteration = 0
@@ -200,10 +207,13 @@ class KMeans:
             elif self.stop_threshold(previous, self.centroids, distance_method):
                 self.initialize_cluster()
                 self.classifies_points(data, distance_method)
-                print('=== Convergência Parcial (Stop Threshold === \n')
+                print('=== Threshold atingido=== \n')
                 changed = False
 
+        self.iteration = iteration
         print("Iteration: %d" % iteration)
+
+        self._recover_labels(data)
 
     def print_centroids(self):
         for centroid in self.centroids:
@@ -215,7 +225,7 @@ def main():
     data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True)
 
     kms = KMeans(k=2, max_iterations=500)
-    kms.fit(data, distance_method=Distance.Type.euclidean())
+    kms.fit(data, distance_method=DistanceType.EUCLIDEAN)
 
     print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
     print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
