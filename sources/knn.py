@@ -8,10 +8,7 @@
 # Create      :  19/03/2018
 # Last Update :  24/05/2018
 
-import sys
-sys.path.append('../')
-
-from sources.distances import *
+from sources.distances import DistanceType, Distance
 from sources.dataSetUtils import DataSet
 
 
@@ -29,7 +26,7 @@ class KNN:
         self.__positive_hits__ = -1
         self.__classified_as_positive__ = -1
 
-    def __calc_accuracy__(self, result):
+    def _calc_accuracy(self, result):
         # TODO --> Fix DocString
         """
 
@@ -61,28 +58,28 @@ class KNN:
 
         self.accuracy = score / self.test_size
 
-    def __precision__(self):
+    def _precision(self):
         # TODO --> Fix DocString
         """
 
         """
         self.precision = self.__positive_hits__ / self.__number_of_positives__
 
-    def __calc_recall__(self):
+    def _calc_recall(self):
         # TODO --> Fix DocString
         """
 
         """
         self.recall = self.__positive_hits__ / self.__classified_as_positive__
 
-    def __calc_f1_score__(self):
+    def _calc_f1_score(self):
         # TODO --> Fix DocString
         """
 
         """
         self.f1_score = 2 * (self.precision * self.recall)/(self.precision + self.recall)
 
-    def fit(self, k: int, distance_method: Distance.Type, distance_order=0.5):
+    def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
         # TODO --> Fix DocString
         """
         :param k:
@@ -120,9 +117,9 @@ class KNN:
             else:
                 result.append('b')
 
-        self.__calc_accuracy__(result)
-        self.__calc_recall__()
-        self.__calc_f1_score__()
+        self._calc_accuracy(result)
+        self._calc_recall()
+        self._calc_f1_score()
 
 
 def main():
@@ -133,15 +130,15 @@ def main():
 
     k = 13
     print("\nEuclidean distance:")
-    knn.fit(k=k, distance_method=Distance.Type.euclidean())
+    knn.fit(k=k, distance_method=DistanceType.EUCLIDEAN)
     print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nManhattan distance:")
-    knn.fit(k=k, distance_method=Distance.Type.manhattan())
+    knn.fit(k=k, distance_method=DistanceType.MANHATTAN)
     print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nMinkowski distance:")
-    knn.fit(k=k, distance_method=Distance.Type.minkowski(), distance_order=0.5)
+    knn.fit(k=k, distance_method=DistanceType.MINKOWSKI, distance_order=0.5)
     print("Accuracy: %.4f" % knn.accuracy)
 
 
