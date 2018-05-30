@@ -84,7 +84,7 @@ class KMeans:
         for i in range(self.k):
             self.clusters[i] = []
 
-    def initialize_centroids(self, data):
+    def initialize_centroids(self, data, seed=0):
         """
         Inicializa as K centroides, em posições aleatórias dentro do limite de Max e Min.
 
@@ -103,6 +103,7 @@ class KMeans:
             columns_min.append(min(temp))
 
         # Cria K ponto (centroid) aleatórios, entre o valor máximo e mínimo de cada coordenada
+        random.seed(seed)
         for i in range(self.k):
             p = []
             for i_max, i_min in zip(columns_max, columns_min):
@@ -167,13 +168,13 @@ class KMeans:
 
         return True
 
-    def fit(self, data, distance_method=DistanceType.EUCLIDEAN, distance_order=0.5):
+    def fit(self, data, distance_method=DistanceType.EUCLIDEAN, distance_order=0.5, seed=0):
 
         changed = True
         iteration = 0
 
         # Inicializa as K centroides (posições aleatórias)
-        self.initialize_centroids(data)
+        self.initialize_centroids(data, seed)
 
         while changed:  # ....repete a porra toda
 

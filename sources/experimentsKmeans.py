@@ -36,31 +36,31 @@ def generate_csv(header: list, values: zip, filename: str, output_path: str="../
             wr.writerow(row)
 
 
-def run_skl_implementation(data):
-
-    skl_kms = skl_Kmeans(n_clusters=2, algorithm='auto', tol=1e-10, max_iter=5000, init='random')
-    skl_kms.fit_predict(data)
-
-    n_iterations = skl_kms.n_iter_
-    silhouette = silhouette_score(data, skl_kms.labels_, metric='euclidean')
-    calinski_harabaz = calinski_harabaz_score(data, skl_kms.labels_)
-
-    return n_iterations, silhouette, calinski_harabaz
-
-
-def run_our_implementation(data):
+def run_our_implementation(data, seed=0):
     # Execução do Kmeans nosso
     own_kms = own_Kmeans(k=2, tolerance=1e-10, max_iterations=5000)
-    own_kms.fit(data, distance_method=DistanceType.EUCLIDEAN)
+    own_kms.fit(data, distance_method=DistanceType.EUCLIDEAN, seed=seed)
 
     # Guardando os numeros de iterações
     n_iterations = own_kms.iteration
 
     # Calculo da metrica Silhouette Score e armazenamento dos valores
-    silhouette = silhouette_score(data, own_kms.labels, metric='euclidean')
+    silhouette = silhouette_score(data, own_kms.labels, metric='euclidean', random_state=0)
 
     # Calculo da metrica Calinski and Harabaz Score e armazenamento dos valores
     calinski_harabaz = calinski_harabaz_score(data, own_kms.labels)
+
+    return n_iterations, silhouette, calinski_harabaz
+
+
+def run_skl_implementation(data, seed=0):
+
+    skl_kms = skl_Kmeans(n_clusters=2, algorithm='auto', tol=1e-10, max_iter=5000, random_state=seed)
+    skl_kms.fit_predict(data)
+
+    n_iterations = skl_kms.n_iter_
+    silhouette = silhouette_score(data, skl_kms.labels_, metric='euclidean', random_state=0)
+    calinski_harabaz = calinski_harabaz_score(data, skl_kms.labels_)
 
     return n_iterations, silhouette, calinski_harabaz
 
@@ -104,7 +104,7 @@ def run(times, output_path):
 
         # run our own implementation
 
-        n_iterations, silhouette, calinski_harabaz = run_our_implementation(data)
+        n_iterations, silhouette, calinski_harabaz = run_our_implementation(data, seed=i)
 
         n_iterations_our.append(n_iterations)
         silhouette_scores_our.append(silhouette)
@@ -112,7 +112,7 @@ def run(times, output_path):
 
         # run SKL implementation
 
-        n_iterations, silhouette, calinski_harabaz = run_skl_implementation(data)
+        n_iterations, silhouette, calinski_harabaz = run_skl_implementation(data, seed=i)
 
         n_iterations_skl.append(n_iterations)
         silhouette_scores_skl.append(silhouette)
