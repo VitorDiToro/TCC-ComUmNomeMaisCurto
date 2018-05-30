@@ -5,14 +5,15 @@
 
 # Authors     :  Vitor Rodrigues Di Toro <vitorrditoro@gmail.com>
 #                Jonatan Alberto Afonso  <joalberto1@hotmail.com>
-# Create      :  09/05/2018
-# Last Update :  26/05/2018
+# Create  on  :  09/05/2018
+# Last Update :  30/05/2018
 
 
 import random
 import statistics
-from sources.distances import Distance, DistanceType
+
 from sources.dataSetUtils import DataSet
+from sources.distances import Distance, DistanceType
 
 
 def num(s):
@@ -199,19 +200,19 @@ class KMeans:
             if self.max_iterations <= iteration:
                 self.initialize_cluster()
                 self.classifies_points(data, distance_method)
-                print("=== Número máximo de iterações atingido! === \n")
+                # print("=== Número máximo de iterações atingido! === \n")
                 changed = False
             elif previous == self.centroids:
-                print("=== Sistema convergiu! \o/ === \n")
+                # print("=== Sistema convergiu! \o/ === \n")
                 changed = False
             elif self.stop_threshold(previous, self.centroids, distance_method):
                 self.initialize_cluster()
                 self.classifies_points(data, distance_method)
-                print('=== Threshold atingido=== \n')
+                # print('=== Threshold atingido=== \n')
                 changed = False
 
         self.iteration = iteration
-        print("Iteration: %d" % iteration)
+        # print("Iteration: %d" % iteration)
 
         self._recover_labels(data)
 
@@ -227,8 +228,9 @@ def main():
     kms = KMeans(k=2, max_iterations=500)
     kms.fit(data, distance_method=DistanceType.EUCLIDEAN)
 
-    print("Pontos do tipo 1: %d" % len(kms.clusters[0]))
-    print("Pontos do tipo 2: %d" % len(kms.clusters[1]))
+    print("Nº de iterações : " + str(kms.iteration))
+    print("Pontos do tipo 1: " + str(len(kms.clusters[0])))
+    print("Pontos do tipo 2: " + str(len(kms.clusters[1])))
     """
     print("Pontos do tipo 3: %d" % len(kms.clusters[2]))
 
