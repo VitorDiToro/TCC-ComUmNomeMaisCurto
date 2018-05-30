@@ -3,8 +3,8 @@
 
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
-# Create      :  19/05/2018
-# Last Update :  24/05/2018
+# Create On   :  19/05/2018
+# Last Update :  30/05/2018
 
 import os
 import csv
@@ -33,7 +33,7 @@ def generate_csv(header: list, values: zip, filename: str, output_path: str="../
             wr.writerow(row)
 
 
-def test_ks_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
+def run_and_persist(k_first: int = 1, k_last: int = 350, times: int = 100,
                          distance_method: DistanceType = DistanceType.EUCLIDEAN,
                          data_set_path="data_set", output_path="../output/", verbose: bool = False):
     accuracy_values = []
@@ -115,11 +115,12 @@ def main():
 
     k_first = 1
     k_last = 349
-    times = 1000
+    times = 100
 
-    test_ks_and_save_csv(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
-    test_ks_and_save_csv(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
-    test_ks_and_save_csv(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
+    run_and_persist(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
+    run_and_persist(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
+    # run_and_persist(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
+    run_and_persist(k_first, k_last, times, DistanceType.CHEBYSHEV, data_set_path, output_path, verbose=False)
 
 
 if __name__ == '__main__':
