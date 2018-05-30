@@ -20,7 +20,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import calinski_harabaz_score
 
 
-def generate_csv(header: list, values: zip, filename: str, output_path="../outputs/"):
+def generate_csv(header: list, values: zip, filename: str, output_path: str="../outputs/"):
 
     date_time = datetime.datetime.now().strftime('%Y-%m-%d  %H.%M.%S')
 
@@ -139,8 +139,8 @@ def test(n_experiments, times, output_path):
 
 
 def main():
-    times = 10
-    n_experiments = 10
+    times = 1000
+    n_experiments = 25
     output_path = "../outputs/kmeans/"
 
     test(n_experiments, times, output_path)
