@@ -96,11 +96,11 @@ def run(times, output_path):
     mean_calinski_harabaz_scores_skl = []
     stdev_calinski_harabaz_scores_skl = []
 
-    for n in range(times):
+    for i in range(times):
 
         # TODO read only once ; randomize 'times' times
 
-        data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True)
+        data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True, seed=i)
 
         # run our own implementation
 

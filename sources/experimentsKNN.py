@@ -71,8 +71,9 @@ def run_and_persist(k_first: int = 1, k_last: int = 350, times: int = 100,
                 print("K" + str(k) + ", ", end='')
 
         for i in range(times):
+
             training_data, test_data = DataSet.get_data(data_set_path, percent_to_training=60, randomize=True,
-                                                        verbose=False)
+                                                        seed=i,verbose=False)
             knn = KNN(training_data, test_data)
             knn.fit(k=k, distance_method=distance_method)
 

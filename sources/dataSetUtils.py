@@ -10,7 +10,7 @@
 # Last Update   :   19/05/2018
 
 import csv
-from random import shuffle
+import random
 
 import sys
 sys.path.append('../')
@@ -42,14 +42,15 @@ class DataSet:
             writer.writerows(my_csv_list)
 
     @staticmethod
-    def get_data_lc(data_set_name, lines, columns, randomize=False):
+    def get_data_lc(data_set_name, lines, columns, seed=0, randomize=False):
         with open(data_set_name, 'r') as File:
             reader = csv.reader(File, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 
             l_reader = list(reader)
 
             if randomize:
-                shuffle(l_reader)
+                random.seed(seed)
+                random.shuffle(l_reader)
 
         data = []
         tmp = [[l_reader[i][j] for j in columns] for i in lines]
@@ -59,12 +60,13 @@ class DataSet:
         return data
 
     @staticmethod
-    def get_data(dataset_name: str='data.csv', percent_to_training: int=60, randomize: bool=True, verbose: bool=True):
+    def get_data(dataset_name: str='data.csv', percent_to_training: int=60, randomize: bool=True, seed:int=0, verbose: bool=True):
         # TODO --> Fix DocString
         """
         :param dataset_name:
         :param percent_to_training:
         :param randomize:
+        :param seed:
         :param verbose:
         :return:
         """
@@ -80,7 +82,8 @@ class DataSet:
             limit = int(len(l_reader) * (percent_to_training / 100))
 
             if randomize:
-                shuffle(l_reader)
+                random.seed(seed)
+                random.shuffle(l_reader)
 
             for row in l_reader:
 
