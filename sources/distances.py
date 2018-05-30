@@ -14,6 +14,7 @@ class DistanceType(Enum):
     EUCLIDEAN = 'Euclidean'
     MANHATTAN = 'Manhattan'
     MINKOWSKI = 'Minkowski'
+    CHEBYSHEV = 'Chebyshev'
 
     def name(self):
         return self._value_
@@ -33,7 +34,7 @@ class Distance:
 
         if distance_method == DistanceType.EUCLIDEAN:
             """
-            EuclideanDistance Distance implementation
+            Euclidean Distance implementation
                 
             See: https://en.wikipedia.org/wiki/Euclidean_distance
             """
@@ -49,7 +50,7 @@ class Distance:
 
         elif distance_method == DistanceType.MANHATTAN:
             """
-            ManhattanDistance Distance implementation
+            Manhattan Distance implementation
         
             See: https://en.wikipedia.org/wiki/Taxicab_geometry
             """
@@ -81,6 +82,21 @@ class Distance:
 
             result = sum_value ** (1 / self.distance_order)
 
+        elif distance_method == DistanceType.CHEBYSHEV:
+            """        
+        
+            See: https://en.wikipedia.org/wiki/Chebyshev_distance
+            """
+
+            max_distance = -1
+
+            for u, v in zip(p1, p2):
+                axis_distance = abs(u - v)
+                max_distance = max(max_distance, axis_distance)
+
+            result = max_distance
+
+
         else:
             result = None
 
@@ -96,7 +112,6 @@ class TestDistances(unittest.TestCase):
 
         p1 = [0, 0, 0, 'b']
         p2 = [2, 2, 2, 'g']
-
         self.assertEqual(distance.calculator(p1, p2, DistanceType.EUCLIDEAN), (2 * (3 ** 0.5)))
 
         p1 = [0, 5, -8, 9, 3, 'b']
@@ -114,7 +129,6 @@ class TestDistances(unittest.TestCase):
 
         p1 = [0, 0, 0, "String"]
         p2 = [2, 2, 2, "Str"]
-
         self.assertEqual(distance.calculator(p1, p2, DistanceType.MANHATTAN), 6)
 
         p1 = [0, 5, -8, 9, 3]
@@ -133,21 +147,18 @@ class TestDistances(unittest.TestCase):
         p1 = [0, 3, 4, 5, 'g']
         p2 = [7, 6, 3, -1, 'b']
         n = 3
-
         distance.set_distance_order(n)
         self.assertEqual(round(distance.calculator(p1, p2, DistanceType.MINKOWSKI), 3), 8.373)
 
         p1 = [0.5, 3.9, -4.37, 5.5, "Str"]
         p2 = [7.72, 6.36, 3.27, -1.98, "Sting"]
         n = -0.25
-
         distance.set_distance_order(n)
         self.assertEqual(round(distance.calculator(p1, p2, DistanceType.MINKOWSKI), 5), 0.02139)
 
         p1 = [0.5, 3.9, -4.37, 5.5]
         p2 = [7.72, 6.36, 3.27, -1.98]
         n = 4
-
         distance.set_distance_order(n)
         self.assertEqual(round(distance.calculator(p1, p2, DistanceType.MINKOWSKI), 3), 9.818)
 

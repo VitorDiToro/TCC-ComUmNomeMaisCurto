@@ -7,7 +7,6 @@ Created on Sat May 19 08:52:36 2018
 
 import os
 import csv
-import numpy
 import datetime
 import statistics
 
@@ -96,15 +95,25 @@ def test(n_experiments, times, output_path):
     stdev_calinski_harabaz_scores_skl = []
 
     for n in range(n_experiments):
+        n_iterations_our.clear()
+        silhouette_scores_our.clear()
+        calinski_harabaz_scores_our.clear()
+
+        n_iterations_skl.clear()
+        silhouette_scores_skl.clear()
+        calinski_harabaz_scores_skl.clear()
         for i in range(times):
+            print("exp: " + str(n) + "\t" + "time: " + str(i))
             data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True)
 
             n_iterations, silhouette, calinski_harabaz = tests_our_implementation(data)
+
             n_iterations_our.append(n_iterations)
             silhouette_scores_our.append(silhouette)
             calinski_harabaz_scores_our.append(calinski_harabaz)
 
             n_iterations, silhouette, calinski_harabaz = tests_skl_implementation(data)
+
             n_iterations_skl.append(n_iterations)
             silhouette_scores_skl.append(silhouette)
             calinski_harabaz_scores_skl.append(calinski_harabaz)
@@ -140,8 +149,11 @@ def test(n_experiments, times, output_path):
 
 def main():
     times = 1000
-    n_experiments = 25
+    n_experiments = 5
     output_path = "../outputs/kmeans/"
+
+    date_time = datetime.datetime.now().strftime('%Y-%m-%d  %H.%M.%S')
+    print(date_time)
 
     test(n_experiments, times, output_path)
 

@@ -81,9 +81,6 @@ def test_ks_and_save_csv(k_first: int = 1, k_last: int = 350, times: int = 100,
             recall_values.append(knn.recall)
             f1_score_values.append(knn.f1_score)
 
-            if verbose:
-                print("accuracy: " + str(knn.accuracy))
-
         accuracy_mean.append(statistics.mean(accuracy_values))
         accuracy_stdev.append(statistics.stdev(accuracy_values))
 
@@ -114,7 +111,7 @@ def main():
     ds.fix_data_set('ionosphere', 'data')
 
     data_set_path = '../dataset/ionosphere.csv'
-    output_path = "../outputs/knn"
+    output_path = "../outputs/knn/"
 
     k_first = 1
     k_last = 349
