@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Implementação do KNN 
+# Implementation of KNN
 
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
-# Create      :  19/03/2018
+# Create on   :  19/03/2018
 # Last Update :  24/05/2018
 
 from sources.distances import DistanceType, Distance
@@ -22,71 +22,75 @@ class KNN:
         self.recall = -1
         self.precision = -1
         self.f1_score = -1
-        self.__number_of_positives__ = -1
-        self.__positive_hits__ = -1
-        self.__classified_as_positive__ = -1
+        self._number_of_positives = -1
+        self._positive_hits = -1
+        self._classified_as_positive = -1
 
-    def _calc_accuracy(self, result):
-        # TODO --> Fix DocString
-        """
-
-        :param result:
-        :return:
-        """
-
-        score = 0
-        self.__number_of_positives__ = 0.0
-        self.__positive_hits__ = 0.0
-        self.__classified_as_positive__ = 0.0
+    def _prepare_metrics(self, result):
+        self.hits = 0
+        self._number_of_positives = 0.0
+        self._positive_hits = 0.0
+        self._classified_as_positive = 0.0
 
         for i in range(self.test_size):
             # count hits
             if result[i] == self.test[i][-1]:
-                score += 1
+                self.hits += 1.0                                # Count TP and TN
 
             # count positives classifications
             if result[i] == 'g':
-                self.__classified_as_positive__ = self.__classified_as_positive__ + 1.0
+                self._classified_as_positive += 1.0             # Count TP and FP
 
             # count positive hits
             if result[i] == 'g' and self.test[i][-1] == 'g':
-                self.__positive_hits__ = self.__positive_hits__ + 1.0
+                self._positive_hits += 1.0                      # Count TP
 
             # count number of positives values in Test Group
             if self.test[i][-1] == 'g':
-                self.__number_of_positives__ = self.__number_of_positives__ + 1.0
+                self._number_of_positives += 1.0                # Count TP and FN
 
-        self.accuracy = score / self.test_size
-
-    def _precision(self):
+    def _calc_accuracy(self):
         # TODO --> Fix DocString
         """
 
+        ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
-        self.precision = self.__positive_hits__ / self.__number_of_positives__
+        # Accuracy = (TP + TN) / (TP + FP + TN + FN)
+        self.accuracy = self.hits / self.test_size
 
-    def _calc_recall(self):
+    def _calc_precision(self):
         # TODO --> Fix DocString
         """
 
+        ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
-        self.recall = self.__positive_hits__ / self.__classified_as_positive__
+        # Precision = TP / (TP + FN)
+        self.precision = self._positive_hits / self._classified_as_positive
 
-    def _calc_f1_score(self):
+    def _calc_recall(self):     # OK, @Vitor, 30/05/18
         # TODO --> Fix DocString
         """
 
+        ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
-        self.f1_score = 2 * (self.precision * self.recall)/(self.precision + self.recall)
+        # Recall = TP / (TP + FN)
+        self.recall = self._positive_hits / self._number_of_positives
+
+    def _calc_f1_score(self):   # OK, @Vitor, 30/05/18
+        # TODO --> Fix DocString
+        """
+
+        ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
+        """
+        # F1 Score = 2*(Recall * Precision) / (Recall + Precision)
+        self.f1_score = 2 * (self.recall * self.precision)/(self.recall + self.precision)
 
     def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
-        # TODO --> Fix DocString
         """
-        :param k:
-        :param distance_method:
-        :param distance_order:
+        :param k: number of neighbors
+        :param distance_method: method to calculate distance (Euclidean, Manhattan or Minkowski)
+        :param distance_order: distance order (Just used in Minkowski distance)
         """
-
         result = []
 
         for i in range(self.test_size):
@@ -117,7 +121,9 @@ class KNN:
             else:
                 result.append('b')
 
-        self._calc_accuracy(result)
+        self._prepare_metrics(result)
+        self._calc_accuracy()
+        self._calc_precision()
         self._calc_recall()
         self._calc_f1_score()
 
