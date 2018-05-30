@@ -6,7 +6,7 @@
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Create on   :  19/03/2018
-# Last Update :  30/05/2018
+# Last Update :  24/05/2018
 
 from sources.distances import DistanceType, Distance
 from sources.dataSetUtils import DataSet
@@ -18,38 +18,36 @@ class KNN:
         self.test = test
         self.training_size = len(training)
         self.test_size = len(test)
-        self.accuracy = None
-        self.recall = None
-        self.precision = None
-        self.f1_score = None
-        self._tp = None
-        self._fp = None
-        self._tn = None
-        self._fn = None
+        self.accuracy = -1
+        self.recall = -1
+        self.precision = -1
+        self.f1_score = -1
+        self._number_of_positives = -1
+        self._positive_hits = -1
+        self._classified_as_positive = -1
 
     def _prepare_metrics(self, result):
-        self._tp = 0.0
-        self._fp = 0.0
-        self._tn = 0.0
-        self._fn = 0.0
+        self.hits = 0
+        self._number_of_positives = 0.0
+        self._positive_hits = 0.0
+        self._classified_as_positive = 0.0
 
         for i in range(self.test_size):
+            # count hits
+            if result[i] == self.test[i][-1]:
+                self.hits += 1.0                                # Count TP and TN
 
-            # count true positivies
+            # count positives classifications
+            if result[i] == 'g':
+                self._classified_as_positive += 1.0             # Count TP and FP
+
+            # count positive hits
             if result[i] == 'g' and self.test[i][-1] == 'g':
-                self._tp += 1.0
+                self._positive_hits += 1.0                      # Count TP
 
-            # count true positivies
-            if result[i] == 'g' and self.test[i][-1] == 'b':
-                self._fp += 1.0
-
-            # count true positivies
-            if result[i] == 'b' and self.test[i][-1] == 'b':
-                self._tn += 1.0
-
-            # count true positivies
-            if result[i] == 'b' and self.test[i][-1] == 'g':
-                self._fn += 1.0
+            # count number of positives values in Test Group
+            if self.test[i][-1] == 'g':
+                self._number_of_positives += 1.0                # Count TP and FN
 
     def _calc_accuracy(self):
         # TODO --> Fix DocString
@@ -58,7 +56,7 @@ class KNN:
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
         # Accuracy = (TP + TN) / (TP + FP + TN + FN)
-        self.accuracy = (self._tp + self._tn) / (self._tp + self._fp + self._tn + self._fn)
+        self.accuracy = self.hits / self.test_size
 
     def _calc_precision(self):
         # TODO --> Fix DocString
@@ -66,26 +64,26 @@ class KNN:
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
-        # Precision = TP / (TP + FP)
-        self.precision = self._tp / (self._tp + self._fp)
+        # Precision = TP / (TP + FN)
+        self.precision = self._positive_hits / self._classified_as_positive
 
-    def _calc_recall(self):
+    def _calc_recall(self):     # OK, @Vitor, 30/05/18
         # TODO --> Fix DocString
         """
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
         # Recall = TP / (TP + FN)
-        self.recall = self._tp / (self._tp + self._fn)
+        self.recall = self._positive_hits / self._number_of_positives
 
-    def _calc_f1_score(self):
+    def _calc_f1_score(self):   # OK, @Vitor, 30/05/18
         # TODO --> Fix DocString
         """
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
-        # F1 Score = 2.0 * (Recall * Precision) / (Recall + Precision)
-        self.f1_score = 2.0 * (self.recall * self.precision) / (self.recall + self.precision)
+        # F1 Score = 2*(Recall * Precision) / (Recall + Precision)
+        self.f1_score = 2 * (self.recall * self.precision)/(self.recall + self.precision)
 
     def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
         """
