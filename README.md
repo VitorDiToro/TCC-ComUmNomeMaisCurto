@@ -9,8 +9,9 @@
 |  KNN - Plot/CSV  |   :alien:    |  :alien:   |  :alien:   |      -       |  :fire:  |
 |  K-Means - Plot  |    :poop:    |   :poop:   |   :poop:   |      -       |  :poop:  |
 |     Accuracy     |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :fire:  |
-|      Recall      |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:    |  :poop:  |
-|     F1 Score     |   :rocket:   |  :rocket:  |  :rocket:  |    :poop:    |  :poop:  |
+|     Precision    |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :poop:  |
+|      Recall      |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :poop:  |
+|     F1 Score     |   :alien:    |  :alien:   |  :alien:   |    :poop:    |  :poop:  |
 
 
 :fire: - Com Problema / Desatualizado<br>

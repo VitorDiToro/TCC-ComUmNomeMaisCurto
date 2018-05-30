@@ -5,13 +5,10 @@
 
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
-# Date        :  19/03/2018
-# Last Update :  19/05/2018
+# Create      :  19/03/2018
+# Last Update :  24/05/2018
 
-import sys
-sys.path.append('../')
-
-from sources.distances import *
+from sources.distances import DistanceType, Distance
 from sources.dataSetUtils import DataSet
 
 
@@ -24,8 +21,12 @@ class KNN:
         self.accuracy = -1
         self.recall = -1
         self.precision = -1
+        self.f1_score = -1
+        self.__number_of_positives__ = -1
+        self.__positive_hits__ = -1
+        self.__classified_as_positive__ = -1
 
-    def __calc_accuracy__(self, result):
+    def _calc_accuracy(self, result):
         # TODO --> Fix DocString
         """
 
@@ -34,20 +35,56 @@ class KNN:
         """
 
         score = 0
-        for i in range(self.test_size):
+        self.__number_of_positives__ = 0.0
+        self.__positive_hits__ = 0.0
+        self.__classified_as_positive__ = 0.0
 
+        for i in range(self.test_size):
+            # count hits
             if result[i] == self.test[i][-1]:
                 score += 1
 
-        self.accuracy = (100 * score / self.test_size)
+            # count positives classifications
+            if result[i] == 'g':
+                self.__classified_as_positive__ = self.__classified_as_positive__ + 1.0
 
-    def fit(self, k: int, distance_method: Distance.Type, distance_order=0.5):
+            # count positive hits
+            if result[i] == 'g' and self.test[i][-1] == 'g':
+                self.__positive_hits__ = self.__positive_hits__ + 1.0
+
+            # count number of positives values in Test Group
+            if self.test[i][-1] == 'g':
+                self.__number_of_positives__ = self.__number_of_positives__ + 1.0
+
+        self.accuracy = score / self.test_size
+
+    def _precision(self):
+        # TODO --> Fix DocString
         """
 
+        """
+        self.precision = self.__positive_hits__ / self.__number_of_positives__
+
+    def _calc_recall(self):
+        # TODO --> Fix DocString
+        """
+
+        """
+        self.recall = self.__positive_hits__ / self.__classified_as_positive__
+
+    def _calc_f1_score(self):
+        # TODO --> Fix DocString
+        """
+
+        """
+        self.f1_score = 2 * (self.precision * self.recall)/(self.precision + self.recall)
+
+    def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
+        # TODO --> Fix DocString
+        """
         :param k:
         :param distance_method:
         :param distance_order:
-        :return:
         """
 
         result = []
@@ -80,7 +117,9 @@ class KNN:
             else:
                 result.append('b')
 
-        self.__calc_accuracy__(result)
+        self._calc_accuracy(result)
+        self._calc_recall()
+        self._calc_f1_score()
 
 
 def main():
@@ -91,16 +130,16 @@ def main():
 
     k = 13
     print("\nEuclidean distance:")
-    knn.fit(k=k, distance_method=Distance.Type.euclidean())
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    knn.fit(k=k, distance_method=DistanceType.EUCLIDEAN)
+    print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nManhattan distance:")
-    knn.fit(k=k, distance_method=Distance.Type.manhattan())
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    knn.fit(k=k, distance_method=DistanceType.MANHATTAN)
+    print("Accuracy: %.4f" % knn.accuracy)
 
     print("\nMinkowski distance:")
-    knn.fit(k=k, distance_method=Distance.Type.minkowski(), distance_order=0.5)
-    print("Accuracy: %.4f %%" % knn.accuracy)
+    knn.fit(k=k, distance_method=DistanceType.MINKOWSKI, distance_order=0.5)
+    print("Accuracy: %.4f" % knn.accuracy)
 
 
 if __name__ == '__main__':
