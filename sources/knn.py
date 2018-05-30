@@ -6,7 +6,7 @@
 # Author      :  Vitor Rodrigues Di Toro
 # E-Mail      :  vitorrditoro@gmail.com
 # Create on   :  19/03/2018
-# Last Update :  24/05/2018
+# Last Update :  30/05/2018
 
 from sources.distances import DistanceType, Distance
 from sources.dataSetUtils import DataSet
