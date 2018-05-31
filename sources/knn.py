@@ -45,15 +45,15 @@ class KNN:
             if result[i] == 'g' and self.test[i][-1] == 'g':
                 self._tp += 1.0
 
-            # Count true positives
+            # Count false positives
             if result[i] == 'g' and self.test[i][-1] == 'b':
                 self._fp += 1.0
 
-            # Count true positives
+            # Count true negatives
             if result[i] == 'b' and self.test[i][-1] == 'b':
                 self._tn += 1.0
 
-            # Count true positives
+            # Count false negatives
             if result[i] == 'b' and self.test[i][-1] == 'g':
                 self._fn += 1.0
 

@@ -56,15 +56,15 @@ def skl_calculation_metrics(result_labels, test_labels):
         if result_labels[i] == 'g' and test_labels[i] == 'g':
             tp += 1.0
 
-        # Count true positives
+        # Count false positives
         if result_labels[i] == 'g' and test_labels[i] == 'b':
             fp += 1.0
 
-        # Count true positives
+        # Count true negatives
         if result_labels[i] == 'b' and test_labels[i] == 'b':
             tn += 1.0
 
-        # Count true positives
+        # Count false negatives
         if result_labels[i] == 'b' and test_labels[i] == 'g':
             fn += 1.0
 
