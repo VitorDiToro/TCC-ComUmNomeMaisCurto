@@ -3,18 +3,18 @@
 #
 # Author        :   Vitor Rodrigues Di Toro
 # E-Mail        :   vitorrditoro@gmail.com
-# Create        :   14/03/2018
-# Last Update   :   09/05/2018
+# Created on    :   14/03/2018
+# Last Update   :   31/05/2018
 
 import unittest
 from enum import Enum
 
 
 class DistanceType(Enum):
-    EUCLIDEAN = 'Euclidean'
-    MANHATTAN = 'Manhattan'
-    MINKOWSKI = 'Minkowski'
-    CHEBYSHEV = 'Chebyshev'
+    EUCLIDEAN = 'euclidean'
+    MANHATTAN = 'manhattan'
+    MINKOWSKI = 'minkowski'
+    CHEBYSHEV = 'chebyshev'
 
     def name(self):
         return self._value_
@@ -99,7 +99,6 @@ class Distance:
 
             result = max_distance
 
-
         else:
             result = None
 
@@ -172,6 +171,9 @@ class TestDistances(unittest.TestCase):
         self.assertEqual(DistanceType.MANHATTAN.name(), 'Manhattan')
         # Minkowski Distance
         self.assertEqual(DistanceType.MINKOWSKI.name(), 'Minkowski')
+        #
+        self.assertEqual(DistanceType.CHEBYSHEV.name(), 'Chebyshev')
+
 
 if __name__ == "__main__":
     unittest.main()
