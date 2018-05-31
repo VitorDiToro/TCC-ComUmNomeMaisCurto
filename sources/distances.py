@@ -91,8 +91,11 @@ class Distance:
             max_distance = -1
 
             for u, v in zip(p1, p2):
-                axis_distance = abs(u - v)
-                max_distance = max(max_distance, axis_distance)
+                try:
+                    axis_distance = abs(u - v)
+                    max_distance = max(max_distance, axis_distance)
+                except TypeError:
+                    pass
 
             result = max_distance
 

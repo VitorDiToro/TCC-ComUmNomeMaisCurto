@@ -157,7 +157,7 @@ def run(times, output_path):
 def main():
     times = 100
     output_path = "../outputs/kmeans/"
-    run(n_experiments, times, output_path)
+    run(times, output_path)
 
 
 if __name__ == '__main__':

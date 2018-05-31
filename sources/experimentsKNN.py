@@ -120,8 +120,8 @@ def main():
 
     run_and_persist(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
     run_and_persist(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
-    # run_and_persist(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
     run_and_persist(k_first, k_last, times, DistanceType.CHEBYSHEV, data_set_path, output_path, verbose=False)
+    run_and_persist(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
 
 
 if __name__ == '__main__':
