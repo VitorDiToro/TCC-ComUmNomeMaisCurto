@@ -13,6 +13,12 @@ from sources.dataSetUtils import DataSet
 
 
 class KNN:
+    """
+
+    refs: [1] - https://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
+          [2] - http://madhugnadig.com/articles/machine-learning/2017/01/13/implementing-k-nearest-neighbours-from-scratch-in-python.html
+
+    """
     def __init__(self, training, test):
         self.training = training
         self.test = test
@@ -35,19 +41,19 @@ class KNN:
 
         for i in range(self.test_size):
 
-            # count true positivies
+            # Count true positives
             if result[i] == 'g' and self.test[i][-1] == 'g':
                 self._tp += 1.0
 
-            # count true positivies
+            # Count true positives
             if result[i] == 'g' and self.test[i][-1] == 'b':
                 self._fp += 1.0
 
-            # count true positivies
+            # Count true positives
             if result[i] == 'b' and self.test[i][-1] == 'b':
                 self._tn += 1.0
 
-            # count true positivies
+            # Count true positives
             if result[i] == 'b' and self.test[i][-1] == 'g':
                 self._fn += 1.0
 
