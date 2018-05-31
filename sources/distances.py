@@ -166,13 +166,13 @@ class TestDistances(unittest.TestCase):
 
     def test_distance_types(self):
         # Euclidean Distance
-        self.assertEqual(DistanceType.EUCLIDEAN.name(), 'Euclidean')
+        self.assertEqual(DistanceType.EUCLIDEAN.name(), 'euclidean')
         # Manhattan Distance
-        self.assertEqual(DistanceType.MANHATTAN.name(), 'Manhattan')
+        self.assertEqual(DistanceType.MANHATTAN.name(), 'manhattan')
         # Minkowski Distance
-        self.assertEqual(DistanceType.MINKOWSKI.name(), 'Minkowski')
-        #
-        self.assertEqual(DistanceType.CHEBYSHEV.name(), 'Chebyshev')
+        self.assertEqual(DistanceType.MINKOWSKI.name(), 'minkowski')
+        # Chebyshev Distance
+        self.assertEqual(DistanceType.CHEBYSHEV.name(), 'chebyshev')
 
 
 if __name__ == "__main__":
