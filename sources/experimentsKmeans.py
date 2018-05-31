@@ -2,7 +2,9 @@
 """
 Created on Sat May 19 08:52:36 2018
 
-@author: Jonatan Alberto Afonso
+authors: Vitor Rodrigues Di Toro
+         Marcelo Vinicios Cysneiros Aragão
+         Jonatan Alberto Afonso
 """
 
 import os
@@ -157,6 +159,7 @@ def run(times, output_path):
 def main():
     times = 100
     output_path = "../outputs/kmeans/"
+
     run(times, output_path)
 
 
