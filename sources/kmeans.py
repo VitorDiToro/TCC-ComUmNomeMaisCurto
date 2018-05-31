@@ -5,7 +5,7 @@
 
 # Authors     :  Vitor Rodrigues Di Toro <vitorrditoro@gmail.com>
 #                Jonatan Alberto Afonso  <joalberto1@hotmail.com>
-# Create  on  :  09/05/2018
+# Created on  :  09/05/2018
 # Last Update :  30/05/2018
 
 
