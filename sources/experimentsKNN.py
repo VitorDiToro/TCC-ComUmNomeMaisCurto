@@ -136,7 +136,7 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
         f1_score_stdev.append(statistics.stdev(f1_score_values))
 
     # Save results in CSV file
-    filename = "Our_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
+    filename = "Our_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
                + str(times) + "]_-_"
     header = ["accuracy_mean", "accuracy_stdev",
               "precision_mean", "precision_stdev",
@@ -195,7 +195,7 @@ def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
             test_data = [t[:-1] for t in test_group]
             test_labels = [l[-1] for l in test_group]
 
-            knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric=distance_method.name(), algorithm='brute')
+            knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric=distance_method.name(), algorithm='auto')
             knn.fit(training_data, training_labels)
 
             result_labels = knn.predict(test_data)
@@ -219,7 +219,7 @@ def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
         f1_score_stdev.append(statistics.stdev(f1_score_values))
 
     # Save results in CSV file
-    filename = "SKL_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
+    filename = "SKL_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
                + str(times) + "]_-_"
     header = ["accuracy_mean", "accuracy_stdev",
               "precision_mean", "precision_stdev",
@@ -242,7 +242,7 @@ def main():
     output_path = "../outputs/knn/"
 
     k_first = 1
-    k_last = 349
+    k_last = 210
     times = 100
 
     our_knn_experiment(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
@@ -252,8 +252,8 @@ def main():
 
     skl_knn_experiment(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
     skl_knn_experiment(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
-    skl_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
     skl_knn_experiment(k_first, k_last, times, DistanceType.CHEBYSHEV, data_set_path, output_path, verbose=False)
+    skl_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
 
 
 if __name__ == '__main__':
