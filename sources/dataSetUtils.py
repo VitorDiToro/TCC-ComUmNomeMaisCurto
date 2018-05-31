@@ -6,7 +6,7 @@
 
 # Author        :   Vitor Rodrigues Di Toro
 # E-Mail        :   vitorrditoro@gmail.com
-# Create        :   23/03/2018
+# Created on    :   23/03/2018
 # Last Update   :   19/05/2018
 
 import csv
@@ -15,8 +15,13 @@ import random
 import sys
 sys.path.append('../')
 
-
 def num(s):
+    # TODO --> Fix DocString
+    """
+
+    :param s:
+    :return:
+    """
     try:
         return float(s)
     except ValueError:
@@ -26,10 +31,16 @@ def num(s):
 class DataSet:
     @staticmethod
     def fix_data_set(data_set_name, extension):
+        # TODO --> Fix DocString
+        """
+
+        :param data_set_name:
+        :param extension:
+        :return:
+        """
 
         with open('../dataset/' + data_set_name + "." + extension, 'r') as File:
             reader = csv.reader(File, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
-
             l_reader = list(reader)
 
         my_csv_list = []
@@ -43,9 +54,18 @@ class DataSet:
 
     @staticmethod
     def get_data_lc(data_set_name, lines, columns, seed=0, randomize=False):
+        # TODO --> Fix DocString
+        """
+
+        :param data_set_name:
+        :param lines:
+        :param columns:
+        :param seed:
+        :param randomize:
+        :return:
+        """
         with open(data_set_name, 'r') as File:
             reader = csv.reader(File, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
-
             l_reader = list(reader)
 
             if randomize:
@@ -60,7 +80,8 @@ class DataSet:
         return data
 
     @staticmethod
-    def get_data(dataset_name: str='data.csv', percent_to_training: int=60, randomize: bool=True, seed:int=0, verbose: bool=True):
+    def get_data(dataset_name: str='data.csv', percent_to_training: int=60, randomize: bool=True, seed: int=0,
+                 verbose: bool=True):
         # TODO --> Fix DocString
         """
         :param dataset_name:
