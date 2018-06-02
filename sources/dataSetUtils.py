@@ -10,10 +10,27 @@
 # Last Update   :   19/05/2018
 
 import csv
+import datetime
+import os
 import random
 
-import sys
-sys.path.append('../')
+
+def generate_csv(header: list, values: zip, filename: str, output_path: str="../outputs/"):
+
+    date_time = datetime.datetime.now().strftime('%Y-%m-%d  %H.%M.%S')
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    file_name = output_path + filename + date_time + ".csv"
+
+    with open(file_name, 'w') as my_file:
+        wr = csv.writer(my_file, lineterminator='\n')
+        wr.writerow(header)
+
+        for row in values:
+            wr.writerow(row)
+
 
 def num(s):
     # TODO --> Fix DocString
