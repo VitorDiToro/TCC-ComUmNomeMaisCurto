@@ -100,7 +100,7 @@ class Distance:
             result = max_distance
 
         else:
-            result = None
+            raise ValueError("Algo de errado não está certo!")
 
         return result
 
