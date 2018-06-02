@@ -168,7 +168,7 @@ class KMeans:
 
         return True
 
-    def fit(self, data, distance_method=DistanceType.EUCLIDEAN, distance_order=0.5, seed=0):
+    def fit_predict(self, data, distance_method=DistanceType.EUCLIDEAN, distance_order=0.5, seed=0):
 
         changed = True
         iteration = 0
@@ -227,7 +227,7 @@ def main():
     data = DataSet.get_data_lc('../dataset/ionosphere.csv', range(350), range(34), randomize=True)
 
     kms = KMeans(k=2, max_iterations=500)
-    kms.fit(data, distance_method=DistanceType.EUCLIDEAN)
+    kms.fit_predict(data, distance_method=DistanceType.EUCLIDEAN)
 
     print("Nº de iterações : " + str(kms.iteration))
     print("Pontos do tipo 1: " + str(len(kms.clusters[0])))
