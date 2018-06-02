@@ -6,33 +6,15 @@
 # Created On  :  19/05/2018
 # Last Update :  31/05/2018
 
+
 import os
-import csv
-import datetime
 import statistics
 
-from sources.dataSetUtils import DataSet
+from sources.dataSetUtils import DataSet, generate_csv
 from sources.knn import KNN
-from sources.distances import Distance, DistanceType
+from sources.distances import DistanceType
 
 from sklearn import neighbors
-
-
-def generate_csv(header: list, values: zip, filename: str, output_path: str="../outputs/"):
-
-    date_time = datetime.datetime.now().strftime('%Y-%m-%d  %H.%M.%S')
-
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
-
-    file_name = output_path + filename + date_time + ".csv"
-
-    with open(file_name, 'w') as my_file:
-        wr = csv.writer(my_file, lineterminator='\n')
-        wr.writerow(header)
-
-        for row in values:
-            wr.writerow(row)
 
 
 def skl_calculation_metrics(result_labels, test_labels):
@@ -78,7 +60,11 @@ def skl_calculation_metrics(result_labels, test_labels):
 
 def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
                        distance_method: DistanceType = DistanceType.EUCLIDEAN,
-                       data_set_path="data_set", output_path="../output/", verbose: bool = False):
+                       data_set_path="data_set", output_path="../output/", p: float = 1, verbose: bool = False):
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
     accuracy_values = []
     accuracy_mean = []
     accuracy_stdev = []
@@ -99,7 +85,7 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
         k_first = 1
 
     if verbose:
-        print("Calculating: ", end='')
+        raise ValueError("k_first must be greater or equal than one for calculate KNN metrics")
 
     for k in range(k_first, k_last + 1):
         accuracy_values.clear()
@@ -118,7 +104,7 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
             training_group, test_group = DataSet.get_data(data_set_path, percent_to_training=60, randomize=True,
                                                           seed=i, verbose=False)
             knn = KNN(training_group, test_group)
-            knn.fit(k=k, distance_method=distance_method)
+            knn.fit_predict(k=k, distance_method=distance_method, distance_order=p)
 
             accuracy_values.append(knn.accuracy)
             precision_values.append(knn.precision)
@@ -136,13 +122,15 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
         f1_score_stdev.append(statistics.stdev(f1_score_values))
 
     # Save results in CSV file
-    filename = "Our_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
-               + str(times) + "]_-_"
-    header = ["accuracy_mean", "accuracy_stdev",
+    filename = "Our_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last)\
+               + "]_Times[" + str(times) + "]_-_"
+    header = ["k",
+              "accuracy_mean", "accuracy_stdev",
               "precision_mean", "precision_stdev",
               "recall_mean", "recall_stdev",
               "f1_score_mean", "f1_score_stdev"]
-    values = zip(* [accuracy_mean, accuracy_stdev,
+    values = zip(* [[k for k in range(k_first, k_last+1)],
+                    accuracy_mean, accuracy_stdev,
                     precision_mean, precision_stdev,
                     recall_mean, recall_stdev,
                     f1_score_mean, f1_score_stdev])
@@ -152,7 +140,11 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
 
 def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
                        distance_method: DistanceType = DistanceType.EUCLIDEAN,
-                       data_set_path="data_set", output_path="../output/", p: float = 0.5, verbose: bool = False):
+                       data_set_path="data_set", output_path="../output/", p: float = 1, verbose: bool = False):
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
     accuracy_values = []
     accuracy_mean = []
     accuracy_stdev = []
@@ -170,7 +162,7 @@ def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
     f1_score_stdev = []
 
     if k_first <= 0:
-        k_first = 1
+        raise ValueError("k_first must be greater or equal than one for calculate KNN metrics")
 
     if verbose:
         print("Calculating: ", end='')
@@ -195,7 +187,7 @@ def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
             test_data = [t[:-1] for t in test_group]
             test_labels = [l[-1] for l in test_group]
 
-            knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric=distance_method.name(), algorithm='auto')
+            knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric=distance_method.name(), algorithm='auto', p=p)
             knn.fit(training_data, training_labels)
 
             result_labels = knn.predict(test_data)
@@ -219,19 +211,20 @@ def skl_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
         f1_score_stdev.append(statistics.stdev(f1_score_values))
 
     # Save results in CSV file
-    filename = "SKL_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last) + "]_Times["\
-               + str(times) + "]_-_"
-    header = ["accuracy_mean", "accuracy_stdev",
+    filename = "SKL_Implementation_-_" + distance_method.name() + "_k[" + str(k_first) + "_to_" + str(k_last)\
+               + "]_Times[" + str(times) + "]_-_"
+    header = ["k",
+              "accuracy_mean", "accuracy_stdev",
               "precision_mean", "precision_stdev",
               "recall_mean", "recall_stdev",
               "f1_score_mean", "f1_score_stdev"]
-    values = zip(* [accuracy_mean, accuracy_stdev,
+    values = zip(* [[k for k in range(k_first, k_last+1)],
+                    accuracy_mean, accuracy_stdev,
                     precision_mean, precision_stdev,
                     recall_mean, recall_stdev,
                     f1_score_mean, f1_score_stdev])
 
     generate_csv(header, values, filename, output_path)
-
 
 
 def main():
@@ -241,19 +234,19 @@ def main():
     data_set_path = '../dataset/ionosphere.csv'
     output_path = "../outputs/knn/"
 
-    k_first = 1
-    k_last = 210
-    times = 100
+    k_first = 0
+    k_last = 10
+    times = 3
 
     our_knn_experiment(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
     our_knn_experiment(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
     our_knn_experiment(k_first, k_last, times, DistanceType.CHEBYSHEV, data_set_path, output_path, verbose=False)
-    our_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
+    our_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, p=5, verbose=False)
 
     skl_knn_experiment(k_first, k_last, times, DistanceType.EUCLIDEAN, data_set_path, output_path, verbose=False)
     skl_knn_experiment(k_first, k_last, times, DistanceType.MANHATTAN, data_set_path, output_path, verbose=False)
     skl_knn_experiment(k_first, k_last, times, DistanceType.CHEBYSHEV, data_set_path, output_path, verbose=False)
-    skl_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, verbose=False)
+    skl_knn_experiment(k_first, k_last, times, DistanceType.MINKOWSKI, data_set_path, output_path, p=0.5, verbose=False)
 
 
 if __name__ == '__main__':
