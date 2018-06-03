@@ -82,10 +82,10 @@ def our_knn_experiment(k_first: int = 1, k_last: int = 350, times: int = 100,
     f1_score_stdev = []
 
     if k_first <= 0:
-        k_first = 1
+        raise ValueError("k_first must be greater or equal than one for calculate KNN metrics")
 
     if verbose:
-        raise ValueError("k_first must be greater or equal than one for calculate KNN metrics")
+        print("Calculating: ", end='')
 
     for k in range(k_first, k_last + 1):
         accuracy_values.clear()
