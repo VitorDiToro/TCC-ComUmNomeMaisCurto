@@ -63,6 +63,9 @@ class KNN:
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
+        if self._tp is None or self._fp is None or self._tn is None or self._pn is None:
+            raise ValueError("To calculate Accuracy it is necessary to run \"_prepare_metrics\" method before")
+
         # Accuracy = (TP + TN) / (TP + FP + TN + FN)
         self.accuracy = (self._tp + self._tn) / (self._tp + self._fp + self._tn + self._fn)
 
@@ -72,6 +75,9 @@ class KNN:
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
+        if self._tp is None or self._fp is None or self._tn is None or self._pn is None:
+            raise ValueError("To calculate Accuracy it is necessary to run \"_prepare_metrics\" method before")
+
         # Precision = TP / (TP + FP)
         self.precision = self._tp / (self._tp + self._fp)
 
@@ -81,6 +87,10 @@ class KNN:
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
+
+        if self._tp is None or self._fp is None or self._tn is None or self._pn is None:
+            raise ValueError("To calculate Accuracy it is necessary to run \"_prepare_metrics\" method before")
+
         # Recall = TP / (TP + FN)
         self.recall = self._tp / (self._tp + self._fn)
 
@@ -90,10 +100,13 @@ class KNN:
 
         ref: http://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/
         """
+        if self.recall is None or self.precision is None:
+            raise ValueError("To calculate f1_score it is necessary to calculate recall and precision before")
+
         # F1 Score = 2.0 * (Recall * Precision) / (Recall + Precision)
         self.f1_score = 2.0 * (self.recall * self.precision) / (self.recall + self.precision)
 
-    def fit(self, k: int, distance_method: DistanceType, distance_order=0.5):
+    def fit_predict(self, k: int, distance_method: DistanceType, distance_order=0.5):
         """
         :param k: number of neighbors
         :param distance_method: method to calculate distance (Euclidean, Manhattan or Minkowski)
@@ -144,16 +157,16 @@ def main():
 
     k = 13
     print("\nEuclidean distance:")
-    knn.fit(k=k, distance_method=DistanceType.EUCLIDEAN)
-    print("Accuracy: %.4f" % knn.accuracy)
+    knn.fit_predict(k=k, distance_method=DistanceType.EUCLIDEAN)
+    print("Accuracy: " + str(knn.accuracy))
 
     print("\nManhattan distance:")
-    knn.fit(k=k, distance_method=DistanceType.MANHATTAN)
-    print("Accuracy: %.4f" % knn.accuracy)
+    knn.fit_predict(k=k, distance_method=DistanceType.MANHATTAN)
+    print("Accuracy: " + str(knn.accuracy))
 
     print("\nMinkowski distance:")
-    knn.fit(k=k, distance_method=DistanceType.MINKOWSKI, distance_order=0.5)
-    print("Accuracy: %.4f" % knn.accuracy)
+    knn.fit_predict(k=k, distance_method=DistanceType.MINKOWSKI, distance_order=0.5)
+    print("Accuracy: " + str(knn.accuracy))
 
 
 if __name__ == '__main__':
