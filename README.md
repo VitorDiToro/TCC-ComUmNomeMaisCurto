@@ -15,14 +15,14 @@
 
 <br>
 
-|          Charts                    |  Ploted   |
-| :--------------------------------: | :-------: |
-| Metrics of Canonic KNN             |  :alien:  |
-| Metrics of SKL KNN                 |  :alien:  |
-| Best (Canonical KNN vs SKL KNN)    |  :rocket: |
-| Nº of Iterations (K-Means)         |  :alien:  |
-| Silhouette Score (K-Means)         |  :alien:  |
-| Calinski-Harabasz Score (K-Means)  |  :rocket: |
+|          Charts                    |  Ploted  |
+| :--------------------------------: | :------: |
+| Metrics of Canonic KNN             |  :alien: |
+| Metrics of SKL KNN                 |  :alien: |
+| Best (Canonical KNN vs SKL KNN)    |  :alien: |
+| Nº of Iterations (K-Means)         |  :alien: |
+| Silhouette Score (K-Means)         |  :alien: |
+| Calinski-Harabasz Score (K-Means)  |  :alien: |
 
 <br>
 
