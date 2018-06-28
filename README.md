@@ -6,8 +6,8 @@
 |    Distances    |   :alien:   |  :alien:  |  :alien:  |    :fire:    |  :fire:  |
 |       KNN       |   :alien:   |  :alien:  |  :alien:  |    :poop:    |  :fire:  |
 |     K-Means     |   :alien:   |  :alien:  |  :alien:  |    :poop:    |  :fire:  |
-|    KNN -CSV     |   :alien:   |     -     |     -     |      -       |  :fire:  |
-|  K-Means - CSV  |   :alien:   |     -     |     -     |      -       |  :poop:  |
+|    KNN -CSV     |   :alien:   |  :alien:  |  :alien:  |      -       |  :fire:  |
+|  K-Means - CSV  |   :alien:   |  :alien:  |  :alien:  |      -       |  :poop:  |
 |     Accuracy    |   :alien:   |  :alien:  |  :alien:  |    :poop:    |  :fire:  |
 |     Precision   |   :alien:   |  :alien:  |  :alien:  |    :poop:    |  :poop:  |
 |      Recall     |   :alien:   |  :alien:  |  :alien:  |    :poop:    |  :poop:  |
